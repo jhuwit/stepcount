@@ -1,12 +1,16 @@
 Package: stepcount
-Title: What the Package Does (One Line, Title Case)
+Title: Esimate Step Counts from Accelerometry Data
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person(given = "John",
+           family = "Muschelli",
+           role = c("aut", "cre"),
+           email = "muschellij2@gmail.com",
+           comment = c(ORCID = "0000-0001-6469-1750"))
+Description: Interfaces the `stepcount` Python 
+    module <https://github.com/OxWearables/stepcount> to estimate
+    step counts and other activities from accelerometry data.
+License: MIT + LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3

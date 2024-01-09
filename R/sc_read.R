@@ -6,10 +6,14 @@
 #' sampling errors). Pass `NULL` to disable. Defaults to "uniform".
 #' @param verbose print diagnostic messages
 #'
-#' @return
+#' @return A list of the data and information about the data
 #' @export
 #'
 #' @examples
+#' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+#' if (have_stepcount()) {
+#'   out = sc_read(file)
+#' }
 sc_read = function(
     file,
     resample_hz = "uniform",
@@ -22,7 +26,9 @@ sc_read = function(
     assertthat::is.count(resample_hz) || (
       assertthat::is.string(resample_hz) && resample_hz == "uniform")
   )
-  sc$read(filepath = file,
+  out = sc$read(filepath = file,
           resample_hz = resample_hz,
           verbose = verbose)
+  names(out) = c("data", "info")
+  out
 }

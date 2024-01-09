@@ -22,6 +22,12 @@ use_stepcount_condaenv = function(...) {
 
 #' @export
 #' @rdname use_stepcount_condaenv
+unset_reticulate_python = function() {
+  Sys.unsetenv("RETICULATE_PYTHON")
+}
+
+#' @export
+#' @rdname use_stepcount_condaenv
 have_stepcount_condaenv = function() {
   reticulate::condaenv_exists("stepcount")
 }

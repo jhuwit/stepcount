@@ -45,6 +45,8 @@ sc_load_model = function(
       tempdir(),
       paste0(model_version, "_", model_type, ".joblib.lzma")
     )
+  } else {
+    model_path = path.expand(model_path)
   }
   model = sc$load_model(
     model_path = model_path,

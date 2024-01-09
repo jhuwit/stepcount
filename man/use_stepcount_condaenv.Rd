@@ -2,10 +2,13 @@
 % Please edit documentation in R/use_stepcount_condaenv.R
 \name{use_stepcount_condaenv}
 \alias{use_stepcount_condaenv}
+\alias{unset_reticulate_python}
 \alias{have_stepcount_condaenv}
 \title{Use Conda Environment for \code{stepcount}}
 \usage{
 use_stepcount_condaenv(...)
+
+unset_reticulate_python()
 
 have_stepcount_condaenv()
 }

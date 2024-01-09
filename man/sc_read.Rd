@@ -15,6 +15,15 @@ sampling errors). Pass \code{NULL} to disable. Defaults to "uniform".}
 
 \item{verbose}{print diagnostic messages}
 }
+\value{
+A list of the data and information about the data
+}
 \description{
 Title
+}
+\examples{
+file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+if (have_stepcount()) {
+  out = sc_read(file)
+}
 }
