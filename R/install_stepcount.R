@@ -3,7 +3,6 @@
 #' @param packages packages to install
 #' @param ... Additional arguments to pass to [reticulate::py_install()],
 #' other than `pip` (`pip = TRUE` enforced)
-#' @param envname environment name passed to  [reticulate::py_install()]
 #'
 #' @return Output of [reticulate::py_install]
 #' @export
@@ -14,11 +13,9 @@
 #' }
 #'
 install_stepcount = function(packages = "stepcount",
-                             ...,
-                             envname = "stepcount") {
+                             ...) {
   packages = unique(c(packages, "stepcount"))
   reticulate::py_install(
-    envname = envname,
     packages = packages,
     pip = TRUE, ...)
 }
