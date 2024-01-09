@@ -4,7 +4,7 @@
 \alias{sc_read}
 \title{Title}
 \usage{
-sc_read(file, resample_hz = "uniform", verbose = TRUE)
+sc_read(file, resample_hz = "uniform", verbose = TRUE, keep_pandas = FALSE)
 }
 \arguments{
 \item{file}{path to the file for reading}
@@ -14,6 +14,9 @@ sc_read(file, resample_hz = "uniform", verbose = TRUE)
 sampling errors). Pass \code{NULL} to disable. Defaults to "uniform".}
 
 \item{verbose}{print diagnostic messages}
+
+\item{keep_pandas}{do not convert the data to a \code{data.frame} and keep
+as a \code{pandas} \code{data.frame}}
 }
 \value{
 A list of the data and information about the data
@@ -23,7 +26,7 @@ Title
 }
 \examples{
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
-if (have_stepcount()) {
+if (have_stepcount() && have_stepcount_condaenv()) {
   out = sc_read(file)
 }
 }

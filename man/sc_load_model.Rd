@@ -9,7 +9,8 @@ sc_load_model(
   model_type = c("ssl", "rf"),
   check_md5 = TRUE,
   force_download = FALSE,
-  model_path = NULL
+  model_path = NULL,
+  as_python = FALSE
 )
 
 sc_download_model(model_path, model_type = c("ssl", "rf"), check_md5 = TRUE)
@@ -26,6 +27,8 @@ exists}
 \item{model_path}{the file path to the model.  If on disk, this can be
 re-used and not re-downloaded.  If \code{NULL}, will download to the
 temporary directory}
+
+\item{as_python}{Keep model object as a python object}
 }
 \description{
 Load Stepcount Model

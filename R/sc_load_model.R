@@ -23,6 +23,7 @@ sc_model_md5 = function(model_type) {
 #' @param model_path the file path to the model.  If on disk, this can be
 #' re-used and not re-downloaded.  If `NULL`, will download to the
 #' temporary directory
+#' @param as_python Keep model object as a python object
 #'
 #' @return
 #' @export
@@ -32,14 +33,18 @@ sc_load_model = function(
     model_type = c("ssl", "rf"),
     check_md5 = TRUE,
     force_download = FALSE,
-    model_path = NULL
+    model_path = NULL,
+    as_python = FALSE
 ) {
 
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   model_version = sc_model_version(model_type)
   model_md5 = sc_model_md5(model_type)
-  sc = stepcount_base()
-
+  if (as_python) {
+    sc = stepcount_base_noconvert()
+  } else {
+    sc = stepcount_base()
+  }
   if (is.null(model_path)) {
     model_path = file.path(
       tempdir(),
