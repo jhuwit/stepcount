@@ -11,7 +11,6 @@
 #' if (have_stepcount()) {
 #'    stepcount_version()
 #' }
-#'
 install_stepcount = function(packages = "stepcount",
                              ...) {
   packages = unique(c(packages, "stepcount"))
@@ -24,6 +23,16 @@ install_stepcount = function(packages = "stepcount",
 #' @rdname stepcount_setup
 have_stepcount = function() {
   reticulate::py_module_available("stepcount")
+}
+
+#' @export
+#' @rdname stepcount_setup
+stepcount_check = function() {
+  step_version = try({
+    stepcount_version()
+  }, silent = TRUE)
+  have_stepcount() && !inherits(step_version, "try-error") &&
+    length(step_version) > 0
 }
 
 

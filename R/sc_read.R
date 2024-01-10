@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
-#' if (have_stepcount() && have_stepcount_condaenv()) {
+#' if (stepcount_check()) {
 #'   out = sc_read(file)
 #' }
 sc_read = function(

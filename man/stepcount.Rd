@@ -27,13 +27,18 @@ temporary directory}
 
 \item{verbose}{print diagnostic messages}
 }
+\value{
+A list of the results (\code{data.frame}),
+summary of the results, adjusted summary of the results, and
+information about the data.
+}
 \description{
 Run Stepcount Model on Data
 }
 \examples{
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 df = readr::read_csv(file)
-if (have_stepcount() && have_stepcount_condaenv()) {
+if (stepcount_check()) {
   out = stepcount(file = file)
   out_df = stepcount(file = df)
 }

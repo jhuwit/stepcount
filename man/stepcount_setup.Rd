@@ -3,12 +3,15 @@
 \name{install_stepcount}
 \alias{install_stepcount}
 \alias{have_stepcount}
+\alias{stepcount_check}
 \alias{stepcount_version}
 \title{Install the \code{stepcount} Python Module}
 \usage{
 install_stepcount(packages = "stepcount", ...)
 
 have_stepcount()
+
+stepcount_check()
 
 stepcount_version()
 }
@@ -28,5 +31,4 @@ Install the \code{stepcount} Python Module
 if (have_stepcount()) {
    stepcount_version()
 }
-
 }

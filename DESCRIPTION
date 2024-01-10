@@ -10,7 +10,7 @@ Authors@R:
 Description: Interfaces the `stepcount` Python 
     module <https://github.com/OxWearables/stepcount> to estimate
     step counts and other activities from accelerometry data.
-License: GPL (>= 3) + LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
@@ -20,3 +20,6 @@ Imports:
     lubridate,
     readr,
     reticulate
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
