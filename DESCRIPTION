@@ -18,4 +18,5 @@ Imports:
     assertthat,
     curl,
     lubridate,
+    readr,
     reticulate

@@ -13,14 +13,28 @@ stepcount(
 )
 }
 \arguments{
-\item{verbose}{}
+\item{file}{accelerometry file to process, including CSV,
+CWA, GT3X, and \code{GENEActiv} bin files}
+
+\item{model_type}{type of the model: either random forest (rf) or
+Self-Supervised Learning model (ssl)}
+
+\item{model_path}{the file path to the model.  If on disk, this can be
+re-used and not re-downloaded.  If \code{NULL}, will download to the
+temporary directory}
+
+\item{pytorch_device}{device to use for prediction for PyTorch.}
+
+\item{verbose}{print diagnostic messages}
 }
 \description{
 Run Stepcount Model on Data
 }
 \examples{
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+df = readr::read_csv(file)
 if (have_stepcount() && have_stepcount_condaenv()) {
   out = stepcount(file = file)
+  out_df = stepcount(file = df)
 }
 }

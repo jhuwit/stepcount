@@ -21,7 +21,7 @@ sc_read = function(
     resample_hz = "uniform",
     verbose = TRUE,
     keep_pandas = FALSE
-    ) {
+) {
 
   if (keep_pandas) {
     sc = stepcount_base_noconvert()
@@ -35,8 +35,8 @@ sc_read = function(
       assertthat::is.string(resample_hz) && resample_hz == "uniform")
   )
   out = sc$read(filepath = file,
-          resample_hz = resample_hz,
-          verbose = verbose)
+                resample_hz = resample_hz,
+                verbose = verbose)
   if (keep_pandas) {
     tmp = reticulate::py_to_r(out)
     out = list(

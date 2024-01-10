@@ -1,19 +1,21 @@
 
 #' Run Stepcount Model on Data
 #'
-#' @param file
-#' @param model_type
-#' @param model_path
-#' @param pytorch_device
-#' @param verbose
+#' @param file accelerometry file to process, including CSV,
+#' CWA, GT3X, and `GENEActiv` bin files
+#' @param pytorch_device device to use for prediction for PyTorch.
+#' @param verbose print diagnostic messages
 #'
 #' @return
 #' @export
 #'
+#' @inheritParams sc_load_model
 #' @examples
 #' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+#' df = readr::read_csv(file)
 #' if (have_stepcount() && have_stepcount_condaenv()) {
 #'   out = stepcount(file = file)
+#'   out_df = stepcount(file = df)
 #' }
 stepcount = function(
     file,
@@ -26,6 +28,16 @@ stepcount = function(
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
 
+  if (is.data.frame(file)) {
+    file = sc_rename_data(file)
+    tfile = tempfile(fileext = ".csv.gz")
+    opts = options()
+    on.exit(options(opts))
+    options(digits.secs = 3)
+    file$time = format(file$time, "%Y-%m-%d %H:%M:%OS3")
+    readr::write_csv(x = file, file = tfile, progress = FALSE)
+    file = tfile
+  }
   resample_hz = switch(model_type,
                        ssl = 30L,
                        rf = NULL,
@@ -64,7 +76,10 @@ stepcount = function(
   }
   result = model$predict_from_frame(data = data)
   sc = stepcount_base()
-  summary = sc$summarize(out, reticulate::py_to_r(model$steptol))
+  summary = sc$summarize(result, reticulate::py_to_r(model$steptol),
+                         adjust_estimates = FALSE)
+  summary_adj = sc$summarize(result, reticulate::py_to_r(model$steptol),
+                             adjust_estimates = TRUE)
   result = reticulate::py_to_r(result)
   result = data.frame(
     time = names(result),
@@ -72,5 +87,11 @@ stepcount = function(
   )
   result$time = lubridate::ymd_hms(result$time)
   result$time = lubridate::floor_date(result$time, unit = "1 second")
-  return(result)
+  out = list(
+    steps = result,
+    summary = summary,
+    summary_adjusted = summary_adj,
+    info = info
+  )
+  return(out)
 }
