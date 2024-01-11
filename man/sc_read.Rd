@@ -37,5 +37,6 @@ Read a Data Set for \code{stepcount}
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 if (stepcount_check()) {
   out = sc_read(file)
+  out = sc_read(file, sample_rate = 100L)
 }
 }

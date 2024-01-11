@@ -17,6 +17,7 @@
 #' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 #' if (stepcount_check()) {
 #'   out = sc_read(file)
+#'   out = sc_read(file, sample_rate = 100L)
 #' }
 sc_read = function(
     file,
