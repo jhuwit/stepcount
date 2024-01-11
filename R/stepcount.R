@@ -91,6 +91,11 @@ stepcount = function(
     message("Running step counter...")
   }
   result = model$predict_from_frame(data = data)
+  names(result) = c("Y", "W", "T_steps")
+  W = reticulate::py_to_r(result$W)
+  T_steps = reticulate::py_to_r(result$T_steps)
+  result = result$Y
+
   sc = stepcount_base()
   summary = sc$summarize(result, reticulate::py_to_r(model$steptol),
                          adjust_estimates = FALSE)
@@ -105,6 +110,8 @@ stepcount = function(
   result$time = lubridate::floor_date(result$time, unit = "1 second")
   out = list(
     steps = result,
+    walking = W,
+    step_times = T_steps,
     summary = summary,
     summary_adjusted = summary_adj,
     info = info
