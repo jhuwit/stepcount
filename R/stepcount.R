@@ -5,6 +5,8 @@
 #' CWA, GT3X, and `GENEActiv` bin files
 #' @param pytorch_device device to use for prediction for PyTorch.
 #' @param verbose print diagnostic messages
+#' @param sample_rate the sample rate of the data.  Set to `NULL`
+#' for `stepcount` to try to guess this
 #'
 #' @return A list of the results (`data.frame`),
 #' summary of the results, adjusted summary of the results, and
@@ -21,6 +23,7 @@
 #' }
 stepcount = function(
     file,
+    sample_rate = NULL,
     model_type = c("ssl", "rf"),
     model_path = NULL,
     pytorch_device = c("cpu", "cuda:0"),
@@ -46,6 +49,7 @@ stepcount = function(
                        NULL)
   out = sc_read(file = file,
                 resample_hz = resample_hz,
+                sample_rate = sample_rate,
                 verbose = verbose,
                 keep_pandas = TRUE)
   data = out$data

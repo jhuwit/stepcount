@@ -6,6 +6,7 @@
 \usage{
 stepcount(
   file,
+  sample_rate = NULL,
   model_type = c("ssl", "rf"),
   model_path = NULL,
   pytorch_device = c("cpu", "cuda:0"),
@@ -15,6 +16,9 @@ stepcount(
 \arguments{
 \item{file}{accelerometry file to process, including CSV,
 CWA, GT3X, and \code{GENEActiv} bin files}
+
+\item{sample_rate}{the sample rate of the data.  Set to \code{NULL}
+for \code{stepcount} to try to guess this}
 
 \item{model_type}{type of the model: either random forest (rf) or
 Self-Supervised Learning model (ssl)}

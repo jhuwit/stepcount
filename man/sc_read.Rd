@@ -2,12 +2,21 @@
 % Please edit documentation in R/sc_read.R
 \name{sc_read}
 \alias{sc_read}
-\title{Title}
+\title{Read a Data Set for \code{stepcount}}
 \usage{
-sc_read(file, resample_hz = "uniform", verbose = TRUE, keep_pandas = FALSE)
+sc_read(
+  file,
+  sample_rate = NULL,
+  resample_hz = "uniform",
+  verbose = TRUE,
+  keep_pandas = FALSE
+)
 }
 \arguments{
 \item{file}{path to the file for reading}
+
+\item{sample_rate}{the sample rate of the data.  Set to \code{NULL}
+for \code{stepcount} to try to guess this}
 
 \item{resample_hz}{Target frequency (Hz) to resample the signal. If
 "uniform", use the implied frequency (use this option to fix any device
@@ -22,7 +31,7 @@ as a \code{pandas} \code{data.frame}}
 A list of the data and information about the data
 }
 \description{
-Title
+Read a Data Set for \code{stepcount}
 }
 \examples{
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
