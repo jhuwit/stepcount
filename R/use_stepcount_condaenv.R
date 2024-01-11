@@ -10,8 +10,10 @@ use_stepcount_condaenv = function(...) {
   reticulate_python = Sys.getenv("RETICULATE_PYTHON", unset = NA)
   if (!is.na(reticulate_python)) {
     warning(
-      paste0("RETICULATE_PYTHON environment variable is set, may not work.",
-             'Restart R, run Sys.unsetenv("RETICULATE_PYTHON") before running')
+      paste0(
+        "RETICULATE_PYTHON environment variable is set, may not work.",
+        'Restart R, run Sys.unsetenv("RETICULATE_PYTHON") before running,',
+        "or run stepcount::unset_reticulate_python()")
     )
   }
   if (!have_stepcount_condaenv()) {

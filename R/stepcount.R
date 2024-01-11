@@ -30,6 +30,13 @@ stepcount = function(
     verbose = TRUE
 ) {
 
+  if (!stepcount_check()) {
+    warning(
+      paste0(
+        "stepcount_check() indicates the stepcount functions may not be ",
+        " available, may need to run stepcount::use_stepcount_condaenv()")
+    )
+  }
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
 
