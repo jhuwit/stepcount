@@ -25,7 +25,7 @@ sc_model_md5 = function(model_type) {
 #' temporary directory
 #' @param as_python Keep model object as a python object
 #'
-#' @return
+#' @return A model from Python.  `sc_download_model` returns a model file path.
 #' @export
 #'
 #' @examples

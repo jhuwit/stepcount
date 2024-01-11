@@ -30,6 +30,9 @@ temporary directory}
 
 \item{as_python}{Keep model object as a python object}
 }
+\value{
+A model from Python.  \code{sc_download_model} returns a model file path.
+}
 \description{
 Load Stepcount Model
 }
