@@ -1,4 +1,12 @@
 
+convert_to_df = function(x) {
+  data.frame(
+    time = names(x),
+    steps = unname(c(x))
+  )
+}
+
+
 #' Run Stepcount Model on Data
 #'
 #' @param file accelerometry file to process, including CSV,
@@ -91,10 +99,10 @@ stepcount = function(
     message("Running step counter...")
   }
   result = model$predict_from_frame(data = data)
-  names(result) = c("Y", "W", "T_steps")
-  W = reticulate::py_to_r(result$W)
-  T_steps = reticulate::py_to_r(result$T_steps)
-  result = result$Y
+  W = convert_to_df(reticulate::py_to_r(result[[1]]))
+  # T_steps = reticulate::py_to_r(result[[2]])
+  # T_steps = data.frame(time = unname(T_steps))
+  result = result[[0]]
 
   sc = stepcount_base()
   summary = sc$summarize(result, reticulate::py_to_r(model$steptol),
@@ -102,16 +110,14 @@ stepcount = function(
   summary_adj = sc$summarize(result, reticulate::py_to_r(model$steptol),
                              adjust_estimates = TRUE)
   result = reticulate::py_to_r(result)
-  result = data.frame(
-    time = names(result),
-    steps = unname(c(result))
-  )
+  result = convert_to_df(result)
+
   result$time = lubridate::ymd_hms(result$time)
   result$time = lubridate::floor_date(result$time, unit = "1 second")
   out = list(
     steps = result,
     walking = W,
-    step_times = T_steps,
+    # step_times = T_steps,
     summary = summary,
     summary_adjusted = summary_adj,
     info = info
