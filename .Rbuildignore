@@ -3,3 +3,4 @@
 ^README\.Rmd$
 ^CITATION\.md$
 ^LICENSE\.md$
+^\.DS_Store$
