@@ -1,9 +1,22 @@
 
-convert_to_df = function(x) {
-  data.frame(
+convert_to_df = function(x, colname = "steps") {
+  x = data.frame(
     time = names(x),
     steps = unname(c(x))
   )
+  if (is.character(x$time)) {
+    na_x = is.na(x$time) | x$time %in% ""
+    new_x = lubridate::ymd_hms(x$time)
+    na_new_x = is.na(new_x)
+    if (any(na_new_x & !na_x)) {
+      warning("Coercion of time to POSIXct induced NAs, keeping character")
+    } else {
+      x$time = new_x
+    }
+    rm(list = c("na_x", "new_x", "na_new_x"))
+  }
+  colnames(x)[2] = colname
+  x
 }
 
 
@@ -99,7 +112,7 @@ stepcount = function(
     message("Running step counter...")
   }
   result = model$predict_from_frame(data = data)
-  W = convert_to_df(reticulate::py_to_r(result[[1]]))
+  W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking")
   # T_steps = reticulate::py_to_r(result[[2]])
   # T_steps = data.frame(time = unname(T_steps))
   result = result[[0]]
