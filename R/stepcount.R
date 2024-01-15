@@ -125,7 +125,7 @@ stepcount = function(
   result = reticulate::py_to_r(result)
   result = convert_to_df(result)
 
-  result$time = lubridate::ymd_hms(result$time)
+  # result$time = lubridate::ymd_hms(result$time)
   result$time = lubridate::floor_date(result$time, unit = "1 second")
   out = list(
     steps = result,
