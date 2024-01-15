@@ -130,6 +130,7 @@ stepcount = function(
   out = list(
     steps = result,
     walking = W,
+    processed_data = data,
     # step_times = T_steps,
     summary = summary,
     summary_adjusted = summary_adj,
