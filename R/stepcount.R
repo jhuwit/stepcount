@@ -62,17 +62,11 @@ stepcount = function(
   pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
 
   if (is.data.frame(file)) {
-    file = sc_rename_data(file)
     tfile = tempfile(fileext = ".csv")
-    opts = options()
-    on.exit(options(opts), add = TRUE)
-    options(digits.secs = 3)
-    file$time = format(file$time, "%Y-%m-%d %H:%M:%OS3")
-    readr::write_csv(x = file, file = tfile, progress = FALSE)
+    file = sc_write_csv(df = file, path = tfile)
     on.exit({
       file.remove(tfile)
     }, add = TRUE)
-    file = tfile
   }
   resample_hz = switch(model_type,
                        ssl = 30L,

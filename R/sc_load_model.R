@@ -27,8 +27,6 @@ sc_model_md5 = function(model_type) {
 #'
 #' @return A model from Python.  `sc_download_model` returns a model file path.
 #' @export
-#'
-#' @examples
 sc_load_model = function(
     model_type = c("ssl", "rf"),
     check_md5 = TRUE,

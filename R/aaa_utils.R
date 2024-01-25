@@ -1,3 +1,9 @@
+#' Rename data for Stepcount
+#'
+#' @param data a `data.frame` of raw accelerometry
+#'
+#' @return A `data.frame` of renamed columns
+#' @export
 sc_rename_data = function(data) {
   HEADER_TIMESTAMP = TIME = HEADER_TIME_STAMP = X = Y = Z = NULL
   rm(list = c("HEADER_TIMESTAMP", "HEADER_TIME_STAMP", "X", "Y", "Z",
@@ -19,6 +25,20 @@ sc_rename_data = function(data) {
   colnames(data) = tolower(colnames(data))
   data
 }
+
+#' @export
+#' @param path path to the CSV output file
+#' @rdname sc_rename_data
+sc_write_csv = function(df, path = tempfile(fileext = ".csv")) {
+  df = sc_rename_data(df)
+  opts = options()
+  on.exit(options(opts), add = TRUE)
+  options(digits.secs = 3)
+  file$time = format(file$time, "%Y-%m-%d %H:%M:%OS3")
+  readr::write_csv(x = file, file = path, progress = FALSE)
+  return(path)
+}
+
 
 renamer = function(data, old, new) {
   stopifnot(length(old) == length(new))
