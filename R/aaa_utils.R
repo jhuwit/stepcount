@@ -30,12 +30,12 @@ sc_rename_data = function(data) {
 #' @param path path to the CSV output file
 #' @rdname sc_rename_data
 sc_write_csv = function(data, path = tempfile(fileext = ".csv")) {
-  df = sc_rename_data(data = data)
+  data = sc_rename_data(data = data)
   opts = options()
   on.exit(options(opts), add = TRUE)
   options(digits.secs = 3)
-  file$time = format(file$time, "%Y-%m-%d %H:%M:%OS3")
-  readr::write_csv(x = file, file = path, progress = FALSE)
+  data$time = format(data$time, "%Y-%m-%d %H:%M:%OS3")
+  readr::write_csv(x = data, file = path, progress = FALSE)
   return(path)
 }
 
