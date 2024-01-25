@@ -63,7 +63,7 @@ stepcount = function(
 
   if (is.data.frame(file)) {
     tfile = tempfile(fileext = ".csv")
-    file = sc_write_csv(df = file, path = tfile)
+    file = sc_write_csv(data = file, path = tfile)
     on.exit({
       file.remove(tfile)
     }, add = TRUE)

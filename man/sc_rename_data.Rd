@@ -7,7 +7,7 @@
 \usage{
 sc_rename_data(data)
 
-sc_write_csv(df, path = tempfile(fileext = ".csv"))
+sc_write_csv(data, path = tempfile(fileext = ".csv"))
 }
 \arguments{
 \item{data}{a \code{data.frame} of raw accelerometry}

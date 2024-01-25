@@ -29,8 +29,8 @@ sc_rename_data = function(data) {
 #' @export
 #' @param path path to the CSV output file
 #' @rdname sc_rename_data
-sc_write_csv = function(df, path = tempfile(fileext = ".csv")) {
-  df = sc_rename_data(df)
+sc_write_csv = function(data, path = tempfile(fileext = ".csv")) {
+  df = sc_rename_data(data = data)
   opts = options()
   on.exit(options(opts), add = TRUE)
   options(digits.secs = 3)
