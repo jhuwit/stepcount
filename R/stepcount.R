@@ -40,6 +40,22 @@ convert_to_df = function(x, colname = "steps") {
 #' df = readr::read_csv(file)
 #' if (stepcount_check()) {
 #'   out = stepcount(file = file)
+#'   if (requireNamespace("ggplot2", quietly = TRUE) &&
+#'       requireNamespace("tidyr", quietly = TRUE) &&
+#'       requireNamespace("dplyr", quietly = TRUE)) {
+#'     dat = df[10000:12000,] %>%
+#'       dplyr::select(-annotation) %>%
+#'       tidyr::gather(axis, value, -time)
+#'     st = st %>%
+#'       dplyr::mutate(time = lubridate::as_datetime(time)) %>%
+#'       dplyr::as_tibble()
+#'     st = st %>%
+#'       dplyr::filter(time >= min(dat$time) & time <= max(dat$time))
+#'     dat %>%
+#'       ggplot2::ggplot(ggplot2::aes(x = time, y = value, colour = axis)) +
+#'       ggplot2::geom_line() +
+#'       ggplot2::geom_vline(data = st, ggplot2::aes(xintercept = time))
+#'   }
 #'   out_df = stepcount(file = df)
 #' }
 stepcount = function(
@@ -107,8 +123,21 @@ stepcount = function(
   }
   result = model$predict_from_frame(data = data)
   W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking")
-  # T_steps = reticulate::py_to_r(result[[2]])
-  # T_steps = data.frame(time = unname(T_steps))
+  if (length(result) > 2) {
+    T_steps = try({
+      reticulate::py_to_r(result[[2]])
+    })
+    if (!inherits(T_steps, "try-error")) {
+      T_steps = unname(c(T_steps))
+      T_steps = format(T_steps, format = "%Y-%m-%d %H:%M:%OS4")
+      T_steps = data.frame(time = T_steps)
+    } else {
+      T_steps = NULL
+    }
+  } else {
+    T_steps = NULL
+  }
+
   result = result[[0]]
 
   sc = stepcount_base()
@@ -125,7 +154,7 @@ stepcount = function(
     steps = result,
     walking = W,
     processed_data = data,
-    # step_times = T_steps,
+    step_times = T_steps,
     summary = summary,
     summary_adjusted = summary_adj,
     info = info
