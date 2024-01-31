@@ -130,27 +130,37 @@ stepcount = function(
   model$wd$verbose = verbose
   model$wd$device = pytorch_device
 
-  out = lapply(file, function(file) {
-    out = sc_read(file = file,
+  final_out = vector(mode = "list", length = length(file))
+  for (ifile in seq_len(length(file))) {
+    f = file[[ifile]]
+    out = sc_read(file = f,
                   resample_hz = resample_hz,
                   sample_rate = sample_rate,
                   verbose = verbose,
                   keep_pandas = TRUE)
     data = out$data
     info = out$info
-    rm(out)
 
     if (verbose) {
       message("Predicting from Model")
     }
-    result = model_predict_from_frame(
-      data = data,
-      sample_rate = info[['ResampleRate']],
-      model = model,
-      verbose = verbose)
-    if (!keep_data) {
-      rm(data)
+    # result = model_predict_from_frame(
+    #   data = data,
+    #   sample_rate =,
+    #   model = model,
+    #   verbose = verbose)
+    # TODO: implement reset_sample_rate()
+    model$sample_rate =  info[['ResampleRate']]
+    model$window_len = as.integer(
+      ceiling( info[['ResampleRate']] * reticulate::py_to_r(model$window_sec))
+    )
+    model$wd$sample_rate =  info[['ResampleRate']]
+
+    if (verbose) {
+      message("Running step counter...")
     }
+    result = model$predict_from_frame(data = data)
+
     if (verbose) {
       message("Processing Result")
     }
@@ -159,31 +169,34 @@ stepcount = function(
     if (keep_data) {
       out$processed_data = data
     }
-    out
-  })
-  if (length(out) == 1) {
-    out = out[[1]]
+    final_out[[ifile]] = out
+    rm(out);
+    gc()
   }
-  return(out)
+  rm(model); gc()
+  if (length(final_out) == 1) {
+    final_out = final_out[[1]]
+  }
+  return(final_out)
 }
 
-model_predict_from_frame = function(
-    data,
-    sample_rate,
-    model,
-    verbose = TRUE) {
-  # TODO: implement reset_sample_rate()
-  model$sample_rate = sample_rate
-  model$window_len = as.integer(
-    ceiling(sample_rate * reticulate::py_to_r(model$window_sec))
-  )
-  model$wd$sample_rate = sample_rate
-
-  if (verbose) {
-    message("Running step counter...")
-  }
-  result = model$predict_from_frame(data = data)
-}
+# model_predict_from_frame = function(
+#     data,
+#     sample_rate,
+#     model,
+#     verbose = TRUE) {
+#   # TODO: implement reset_sample_rate()
+#   model$sample_rate = sample_rate
+#   model$window_len = as.integer(
+#     ceiling(sample_rate * reticulate::py_to_r(model$window_sec))
+#   )
+#   model$wd$sample_rate = sample_rate
+#
+#   if (verbose) {
+#     message("Running step counter...")
+#   }
+#   result = model$predict_from_frame(data = data)
+# }
 
 
 process_stepcount_result = function(result, model) {

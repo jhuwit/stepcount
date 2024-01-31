@@ -88,15 +88,17 @@ file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 if (stepcount_check()) {
   out = stepcount(file = file)
 }
+#> Loading model...
+#> Downloading https://wearables-files.ndph.ox.ac.uk/files/models/stepcount/ssl-20230208.joblib.lzma...
 #> Gravity calibration...Gravity calibration... Done! (0.05s)
 #> Nonwear detection...Nonwear detection... Done! (0.04s)
 #> Resampling...Resampling... Done! (0.05s)
-#> Downloading https://wearables-files.ndph.ox.ac.uk/files/models/stepcount/ssl-20230208.joblib.lzma...
-#> Loading model...
+#> Predicting from Model
 #> Running step counter...
 #> Defining windows...
 #> Using local /Users/johnmuschelli/miniconda3/envs/stepcount/lib/python3.9/site-packages/stepcount/torch_hub_cache/OxWearables_ssl-wearables_v1.0.0
 #> Classifying windows...
+#> Processing Result
 ```
 
 Let’s see inside the output, which is a list of values, namely a
@@ -106,31 +108,16 @@ indicators for if there is walking within that 10 second period:
 
 ``` r
 names(out)
-#> [1] "steps"            "walking"          "processed_data"   "step_times"      
-#> [5] "summary"          "summary_adjusted" "info"
+#> [1] "steps"            "walking"          "step_times"       "summary"         
+#> [5] "summary_adjusted" "info"
 str(out)
-#> List of 7
+#> List of 6
 #>  $ steps           :'data.frame':    361 obs. of  2 variables:
 #>   ..$ time : POSIXct[1:361], format: "2019-07-22 14:34:45" "2019-07-22 14:34:55" ...
 #>   ..$ steps: num [1:361] 0 0 0 0 0 0 0 0 0 0 ...
 #>  $ walking         :'data.frame':    361 obs. of  2 variables:
 #>   ..$ time   : POSIXct[1:361], format: "2019-07-22 14:34:45.88" "2019-07-22 14:34:55.88" ...
 #>   ..$ walking: num [1:361] 0 0 0 0 0 0 0 0 0 0 ...
-#>  $ processed_data  :                                      x         y         z
-#> time                                                       
-#> 2019-07-22 14:34:45.890000000 -0.735216 -0.273667 -0.480789
-#> 2019-07-22 14:34:45.923333333 -0.388815 -0.750338 -0.669788
-#> 2019-07-22 14:34:45.956666666 -0.163551 -0.970669 -1.453150
-#> 2019-07-22 14:34:45.990000000 -0.528135 -0.254860 -0.766155
-#> 2019-07-22 14:34:46.023333333 -0.676814 -0.113267 -0.564013
-#> ...                                 ...       ...       ...
-#> 2019-07-22 15:34:45.756666666 -0.304261 -1.151917 -0.164984
-#> 2019-07-22 15:34:45.790000000 -0.350851 -1.331256 -0.227842
-#> 2019-07-22 15:34:45.823333333 -0.387931 -1.248459 -0.122503
-#> 2019-07-22 15:34:45.856666666 -0.132762 -1.285752 -0.103019
-#> 2019-07-22 15:34:45.890000000 -0.126232 -1.376212 -0.079009
-#> 
-#> [108001 rows x 3 columns]
 #>  $ step_times      :'data.frame':    5739 obs. of  1 variable:
 #>   ..$ time: chr [1:5739] "2019-07-22 14:36:26.4899" "2019-07-22 14:36:26.9566" "2019-07-22 14:36:27.4899" "2019-07-22 14:36:27.9566" ...
 #>  $ summary         :List of 16
@@ -308,14 +295,17 @@ head(df)
 #> 5 2019-07-22 14:34:45.930 -0.369 -1.00  -0.949          0
 #> 6 2019-07-22 14:34:45.940 -0.371 -1.17  -1.36           0
 out_df = stepcount(file = df)
+#> Writing file to CSV...
+#> Loading model...
 #> Gravity calibration...Gravity calibration... Done! (0.04s)
 #> Nonwear detection...Nonwear detection... Done! (0.03s)
-#> Resampling...Resampling... Done! (0.05s)
-#> Loading model...
+#> Resampling...Resampling... Done! (0.06s)
+#> Predicting from Model
 #> Running step counter...
 #> Defining windows...
 #> Using local /Users/johnmuschelli/miniconda3/envs/stepcount/lib/python3.9/site-packages/stepcount/torch_hub_cache/OxWearables_ssl-wearables_v1.0.0
 #> Classifying windows...
+#> Processing Result
 ```
 
 Which gives same output for this data:
@@ -324,4 +314,51 @@ Which gives same output for this data:
 all.equal(out[c("steps", "walking", "step_times")],
           out_df[c("steps", "walking", "step_times")])
 #> [1] TRUE
+```
+
+## Running `stepcount` on multiple files
+
+When you pass in multiple files, `stepcount` will run all of them, but
+it will only load the model once, which can have savings, but the
+results are still in memory:
+
+``` r
+if (stepcount_check()) {
+  out2 = stepcount(file = c(file, file))
+  length(out2)
+  names(out2)
+  # all.equal(out[c("steps", "walking", "step_times")], 
+  #           out2[[1]][c("steps", "walking", "step_times")])
+}
+#> Loading model...
+#> Gravity calibration...Gravity calibration... Done! (0.04s)
+#> Nonwear detection...Nonwear detection... Done! (0.04s)
+#> Resampling...Resampling... Done! (0.06s)
+#> Predicting from Model
+#> Running step counter...
+#> Defining windows...
+#> Using local /Users/johnmuschelli/miniconda3/envs/stepcount/lib/python3.9/site-packages/stepcount/torch_hub_cache/OxWearables_ssl-wearables_v1.0.0
+#> Classifying windows...
+#> Processing Result
+#> Gravity calibration...Gravity calibration... Done! (0.04s)
+#> Nonwear detection...Nonwear detection... Done! (0.04s)
+#> Resampling...Resampling... Done! (0.06s)
+#> Predicting from Model
+#> Running step counter...
+#> Defining windows...
+#> Using local /Users/johnmuschelli/miniconda3/envs/stepcount/lib/python3.9/site-packages/stepcount/torch_hub_cache/OxWearables_ssl-wearables_v1.0.0
+#> Classifying windows...
+#> Processing Result
+#> NULL
+```
+
+## Stepcount Random Forest
+
+The `model_type` parameter indicates the type of model being run, and
+the `rf` will provide the predictions from a random forest
+
+``` r
+if (stepcount_check()) {
+  out_rf = stepcount(file = file, model_type = "rf")
+}
 ```

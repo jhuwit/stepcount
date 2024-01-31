@@ -137,3 +137,27 @@ Which gives same output for this data:
 all.equal(out[c("steps", "walking", "step_times")],
           out_df[c("steps", "walking", "step_times")])
 ```
+
+
+## Running `stepcount` on multiple files
+When you pass in multiple files, `stepcount` will run all of them, but it will only load the model once, which can have savings, but the results are still in memory:
+```{r multifile}
+if (stepcount_check()) {
+  out2 = stepcount(file = c(file, file))
+  length(out2)
+  names(out2)
+  # all.equal(out[c("steps", "walking", "step_times")], 
+  #           out2[[1]][c("steps", "walking", "step_times")])
+}
+```
+
+
+## Stepcount Random Forest
+The `model_type` parameter indicates the type of model being run, and the `rf` will provide the predictions from a random forest
+
+```{r run_stepcount_rf, eval = FALSE}
+if (stepcount_check()) {
+  out_rf = stepcount(file = file, model_type = "rf")
+}
+```
+
