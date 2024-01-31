@@ -40,6 +40,7 @@ convert_to_df = function(x, colname = "steps") {
 #' df = readr::read_csv(file)
 #' if (stepcount_check()) {
 #'   out = stepcount(file = file)
+#'   st = out$step_times
 #'   if (requireNamespace("ggplot2", quietly = TRUE) &&
 #'       requireNamespace("tidyr", quietly = TRUE) &&
 #'       requireNamespace("dplyr", quietly = TRUE)) {

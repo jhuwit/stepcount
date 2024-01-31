@@ -9,8 +9,14 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  cache = TRUE
 )
+stepcount::unset_reticulate_python()
+stepcount::use_stepcount_condaenv()
+library(stepcount)
+library(reticulate)
+options(digits.secs = 3)
 ```
 
 # stepcount
@@ -31,4 +37,103 @@ You can install the development version of stepcount from [GitHub](https://githu
 ``` r
 # install.packages("devtools")
 devtools::install_github("jhuwit/stepcount")
+```
+
+
+# Usage
+
+## Loading the `stepcount` conda environment 
+In order to use the `stepcount` conda environment that OxWearables recommends, you must run this command **before `reticulate`** is loaded:
+```{r eval = FALSE}
+stepcount::use_stepcount_condaenv()
+```
+
+## The `RETICULATE_PYTHON` environment variable
+If you have the `RETICULATE_PYTHON` environment variable in your `.Renviron` or your `PATH`, then `reticulate` will still use that version of Python and the code will likely not work.  The `unset_reticulate_python()` function will unset that environment variable.  So the usage would start with something like:
+
+```{r eval = FALSE}
+stepcount::unset_reticulate_python()
+stepcount::use_stepcount_condaenv()
+```
+
+and if you need `reticulate`, you would load it after
+
+```{r eval = FALSE}
+stepcount::unset_reticulate_python()
+stepcount::use_stepcount_condaenv()
+library(reticulate)
+```
+
+The `stepcount_check` function can determine if the `stepcount` module can be loaded
+```{r stepcount_check}
+stepcount::stepcount_check()
+```
+
+## Running `stepcount` (file)
+The main function is `stepcount::stepcount`, which takes can take in a file directly:
+
+```{r run_stepcount_file}
+library(stepcount)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+if (stepcount_check()) {
+  out = stepcount(file = file)
+}
+```
+
+Let's see inside the output, which is a list of values, namely a `data.frame` of `steps` with the time (in 10s increments) and the number of steps in those 10 seconds, a `data.frame` named `walking` which has indicators for if there is walking within that 10 second period:
+
+```{r stepcount_output}
+names(out)
+str(out)
+head(out$steps)
+tail(out$steps)
+tail(out$walking)
+```
+
+The `step_times` `data.frame` indicates which times are when steps occurred (at the original sample rate).  Make sure you have the `digits.secs` option set to see the sub-seconds for the times (esp for writing out files in `readr::write_csv`):
+
+```{r stepcount_output_steptimes}
+head(out$step_times)
+options(digits.secs = 3)
+head(out$step_times)
+```
+
+We can plot a portion of the tri-axial data and show where the steps were indicated:
+```{r stepcount_plot}
+df = readr::read_csv(file)
+if (stepcount_check()) {
+  st = out$step_times
+    dat = df[10000:12000,] %>%
+      dplyr::select(-annotation) %>%
+      tidyr::gather(axis, value, -time)
+    st = st %>%
+      dplyr::mutate(time = lubridate::as_datetime(time)) %>%
+      dplyr::as_tibble()
+    st = st %>%
+      dplyr::filter(time >= min(dat$time) & time <= max(dat$time))
+    dat %>%
+      ggplot2::ggplot(ggplot2::aes(x = time, y = value, colour = axis)) +
+      ggplot2::geom_line() +
+      ggplot2::geom_vline(data = st, ggplot2::aes(xintercept = time))
+}
+```
+
+The main caveat is that `stepcount` is very precise in the format of the data, primarily it must have the columns `time`, `x`, `y`, and `z` in the data.  
+
+## Running `stepcount` (data frame)
+Alternatively, you can pass out a `data.frame`, rename the columns to what you need them to be and then run `stepcount` on that:
+
+```{r run_stepcount_df}
+head(df)
+out_df = stepcount(file = df)
+```
+
+Which gives same output for this data:
+
+```{r stepcount_file_df_check, dependson=c("run_stepcount_file", "run_stepcount_df")}
+all.equal(out[c("steps", "walking", "step_times")],
+          out_df[c("steps", "walking", "step_times")])
 ```
