@@ -40,6 +40,7 @@ sc_read = function(
       assertthat::is.count(resample_hz) ||
       (assertthat::is.string(resample_hz) && resample_hz == "uniform")
   )
+  file = normalizePath(path.expand(file))
   out = sc$read(filepath = file,
                 resample_hz = resample_hz,
                 sample_rate = sample_rate,
