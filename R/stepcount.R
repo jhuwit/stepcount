@@ -28,6 +28,7 @@ convert_to_df = function(x, colname = "steps") {
 #' @param verbose print diagnostic messages
 #' @param sample_rate the sample rate of the data.  Set to `NULL`
 #' for `stepcount` to try to guess this
+#' @param keep_data should the data used in the prediction be in the output?
 #'
 #' @return A list of the results (`data.frame`),
 #' summary of the results, adjusted summary of the results, and
@@ -65,7 +66,8 @@ stepcount = function(
     model_type = c("ssl", "rf"),
     model_path = NULL,
     pytorch_device = c("cpu", "cuda:0"),
-    verbose = TRUE
+    verbose = TRUE,
+    keep_data = FALSE
 ) {
 
   if (!stepcount_check()) {
@@ -77,52 +79,114 @@ stepcount = function(
   }
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
+  resample_hz = switch(model_type,
+                       ssl = 30L,
+                       rf = NULL,
+                       NULL)
 
+  # single df
   if (is.data.frame(file)) {
+    if (verbose) {
+      message("Writing file to CSV...")
+    }
     tfile = tempfile(fileext = ".csv")
     file = sc_write_csv(data = file, path = tfile)
     on.exit({
       file.remove(tfile)
     }, add = TRUE)
   }
-  resample_hz = switch(model_type,
-                       ssl = 30L,
-                       rf = NULL,
-                       NULL)
-  out = sc_read(file = file,
-                resample_hz = resample_hz,
-                sample_rate = sample_rate,
-                verbose = verbose,
-                keep_pandas = TRUE)
-  data = out$data
-  info = out$info
 
+  if (
+    # a list of files
+    (is.character(file) &&
+     all(sapply(file, assertthat::is.readable))) ||
+    # could be list of dfs
+    is.list(file) ) {
+    file = lapply(file, function(f) {
+      if (is.data.frame(f)) {
+        if (verbose) {
+          message("Writing file to CSV...")
+        }
+        tfile = tempfile(fileext = ".csv")
+        f = sc_write_csv(data = f, path = tfile)
+        attr(f, "remove_file") = TRUE
+      }
+      f
+    })
+    names(file) = file
+  }
+
+  # Run model
+  if (verbose) {
+    message("Loading model...")
+  }
   model = sc_load_model(
     model_path = model_path,
     model_type = model_type,
     check_md5 = TRUE,
     force_download = FALSE,
     as_python = TRUE)
-
-  # Run model
-  if (verbose) {
-    message("Loading model...")
-  }
-  # TODO: implement reset_sample_rate()
-  model$sample_rate = info[['ResampleRate']]
-  model$window_len = as.integer(
-    ceiling(info[['ResampleRate']] * reticulate::py_to_r(model$window_sec))
-  )
-  model$wd$sample_rate = info[['ResampleRate']]
   model$verbose = verbose
   model$wd$verbose = verbose
-
   model$wd$device = pytorch_device
+
+  out = lapply(file, function(file) {
+    out = sc_read(file = file,
+                  resample_hz = resample_hz,
+                  sample_rate = sample_rate,
+                  verbose = verbose,
+                  keep_pandas = TRUE)
+    data = out$data
+    info = out$info
+    rm(out)
+
+    if (verbose) {
+      message("Predicting from Model")
+    }
+    result = model_predict_from_frame(
+      data = data,
+      sample_rate = info[['ResampleRate']],
+      model = model,
+      verbose = verbose)
+    if (!keep_data) {
+      rm(data)
+    }
+    if (verbose) {
+      message("Processing Result")
+    }
+    out = process_stepcount_result(result = result, model = model)
+    out$info = info
+    if (keep_data) {
+      out$processed_data = data
+    }
+    out
+  })
+  if (length(out) == 1) {
+    out = out[[1]]
+  }
+  return(out)
+}
+
+model_predict_from_frame = function(
+    data,
+    sample_rate,
+    model,
+    verbose = TRUE) {
+  # TODO: implement reset_sample_rate()
+  model$sample_rate = sample_rate
+  model$window_len = as.integer(
+    ceiling(sample_rate * reticulate::py_to_r(model$window_sec))
+  )
+  model$wd$sample_rate = sample_rate
 
   if (verbose) {
     message("Running step counter...")
   }
   result = model$predict_from_frame(data = data)
+}
+
+
+process_stepcount_result = function(result, model) {
   W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking")
   if (length(result) > 2) {
     T_steps = try({
@@ -142,23 +206,21 @@ stepcount = function(
   result = result[[0]]
 
   sc = stepcount_base()
-  summary = sc$summarize(result, reticulate::py_to_r(model$steptol),
+  summary = sc$summarize(result,
+                         reticulate::py_to_r(model$steptol),
                          adjust_estimates = FALSE)
-  summary_adj = sc$summarize(result, reticulate::py_to_r(model$steptol),
+  summary_adj = sc$summarize(result,
+                             reticulate::py_to_r(model$steptol),
                              adjust_estimates = TRUE)
   result = reticulate::py_to_r(result)
   result = convert_to_df(result)
 
-  # result$time = lubridate::ymd_hms(result$time)
   result$time = lubridate::floor_date(result$time, unit = "1 second")
   out = list(
     steps = result,
     walking = W,
-    processed_data = data,
     step_times = T_steps,
     summary = summary,
-    summary_adjusted = summary_adj,
-    info = info
+    summary_adjusted = summary_adj
   )
-  return(out)
 }

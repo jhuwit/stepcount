@@ -10,7 +10,8 @@ stepcount(
   model_type = c("ssl", "rf"),
   model_path = NULL,
   pytorch_device = c("cpu", "cuda:0"),
-  verbose = TRUE
+  verbose = TRUE,
+  keep_data = FALSE
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ temporary directory}
 \item{pytorch_device}{device to use for prediction for PyTorch.}
 
 \item{verbose}{print diagnostic messages}
+
+\item{keep_data}{should the data used in the prediction be in the output?}
 }
 \value{
 A list of the results (\code{data.frame}),
@@ -44,6 +47,7 @@ file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 df = readr::read_csv(file)
 if (stepcount_check()) {
   out = stepcount(file = file)
+  st = out$step_times
   if (requireNamespace("ggplot2", quietly = TRUE) &&
       requireNamespace("tidyr", quietly = TRUE) &&
       requireNamespace("dplyr", quietly = TRUE)) {
