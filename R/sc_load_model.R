@@ -59,6 +59,15 @@ sc_load_model = function(
   model
 }
 
+#' @export
+#' @rdname sc_load_model
+sc_model_filename = function(
+    model_type = c("ssl", "rf")
+) {
+  model_type = match.arg(model_type, choices = c("ssl", "rf"))
+  model_version = sc_model_version(model_type)
+  paste0(model_version, ".joblib.lzma")
+}
 
 #' @export
 #' @rdname sc_load_model
@@ -69,11 +78,10 @@ sc_download_model = function(
 ) {
 
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
-  model_type = match.arg(model_type, choices = c("ssl", "rf"))
-  model_version = sc_model_version(model_type)
+  model_filename = sc_model_filename(model_type = model_type)
   model_md5 = sc_model_md5(model_type)
   base_url = "https://wearables-files.ndph.ox.ac.uk/files/models/stepcount/"
-  url = paste0(base_url, model_version, ".joblib.lzma")
+  url = paste0(base_url, model_filename)
   curl::curl_download(url = url, destfile = model_path)
   if (check_md5) {
     file_md5 = tools::md5sum(model_path)

@@ -2,6 +2,7 @@
 % Please edit documentation in R/sc_load_model.R
 \name{sc_load_model}
 \alias{sc_load_model}
+\alias{sc_model_filename}
 \alias{sc_download_model}
 \title{Load Stepcount Model}
 \usage{
@@ -12,6 +13,8 @@ sc_load_model(
   model_path = NULL,
   as_python = FALSE
 )
+
+sc_model_filename(model_type = c("ssl", "rf"))
 
 sc_download_model(model_path, model_type = c("ssl", "rf"), check_md5 = TRUE)
 }
