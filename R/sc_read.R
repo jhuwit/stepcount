@@ -36,8 +36,9 @@ sc_read = function(
   assertthat::assert_that(
     assertthat::is.readable(file),
     is.null(sample_rate) || assertthat::is.count(sample_rate),
-    assertthat::is.count(resample_hz) || (
-      assertthat::is.string(resample_hz) && resample_hz == "uniform")
+    is.null(resample_hz) ||
+      assertthat::is.count(resample_hz) ||
+      (assertthat::is.string(resample_hz) && resample_hz == "uniform")
   )
   out = sc$read(filepath = file,
                 resample_hz = resample_hz,
