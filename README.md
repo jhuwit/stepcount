@@ -4,6 +4,8 @@
 # stepcount
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/jhuwit/stepcount/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jhuwit/stepcount/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of `stepcount` is to wrap up the
