@@ -84,6 +84,10 @@ stepcount = function(
                        rf = NULL,
                        NULL)
 
+  if (verbose) {
+    message("Checking Data")
+  }
+
   # single df
   if (is.data.frame(file)) {
     if (verbose) {
@@ -133,6 +137,9 @@ stepcount = function(
   final_out = vector(mode = "list", length = length(file))
   for (ifile in seq_len(length(file))) {
     f = file[[ifile]]
+    if (verbose) {
+      message("Reading in Data for Stepcount")
+    }
     out = sc_read(file = f,
                   resample_hz = resample_hz,
                   sample_rate = sample_rate,
