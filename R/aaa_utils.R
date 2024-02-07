@@ -14,14 +14,14 @@ sc_rename_data = function(data) {
   # uppercase
   colnames(data) = toupper(colnames(data))
   cn = colnames(data)
-  if ("TIME" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = renamer(data, old = "TIME", new = "HEADER_TIME_STAMP")
+  if ("TIME" %in% cn && !"HEADER_TIMESTAMP" %in% cn) {
+    data = renamer(data, old = "TIME", new = "HEADER_TIMESTAMP")
   }
-  if ("HEADER_TIMESTAMP" %in% cn && !"HEADER_TIME_STAMP" %in% cn) {
-    data = renamer(data, old = "HEADER_TIMESTAMP", new = "HEADER_TIME_STAMP")
+  if ("HEADER_TIME_STAMP" %in% cn && !"HEADER_TIMESTAMP" %in% cn) {
+    data = renamer(data, old = "HEADER_TIME_STAMP", new = "HEADER_TIMESTAMP")
   }
-  stopifnot(all(c("X", "Y", "Z", "HEADER_TIME_STAMP") %in% colnames(data)))
-  data = renamer(data, old = "HEADER_TIME_STAMP", new = "time")
+  stopifnot(all(c("X", "Y", "Z", "HEADER_TIMESTAMP") %in% colnames(data)))
+  data = renamer(data, old = "HEADER_TIMESTAMP", new = "time")
   colnames(data) = tolower(colnames(data))
   data
 }
