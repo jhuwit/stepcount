@@ -2,6 +2,7 @@
 % Please edit documentation in R/stepcount.R
 \name{stepcount}
 \alias{stepcount}
+\alias{stepcount_with_model}
 \title{Run Stepcount Model on Data}
 \usage{
 stepcount(
@@ -9,6 +10,16 @@ stepcount(
   sample_rate = NULL,
   model_type = c("ssl", "rf"),
   model_path = NULL,
+  pytorch_device = c("cpu", "cuda:0"),
+  verbose = TRUE,
+  keep_data = FALSE
+)
+
+stepcount_with_model(
+  file,
+  model_type = c("ssl", "rf"),
+  model,
+  sample_rate = NULL,
   pytorch_device = c("cpu", "cuda:0"),
   verbose = TRUE,
   keep_data = FALSE
@@ -33,6 +44,9 @@ temporary directory}
 \item{verbose}{print diagnostic messages}
 
 \item{keep_data}{should the data used in the prediction be in the output?}
+
+\item{model}{A model object loaded from \code{sc_load_model}, but
+\code{as_python} must be \code{TRUE}}
 }
 \value{
 A list of the results (\code{data.frame}),

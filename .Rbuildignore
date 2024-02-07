@@ -6,3 +6,4 @@
 ^\.DS_Store$
 ^README_cache$
 ^\.github$
+^R/stepcount_original\.R$

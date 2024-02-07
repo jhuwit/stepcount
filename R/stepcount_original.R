@@ -19,19 +19,6 @@ convert_to_df = function(x, colname = "steps") {
   x
 }
 
-make_model_params = function(model_type, pytorch_device) {
-  model_type = match.arg(model_type, choices = c("ssl", "rf"))
-  resample_hz = switch(model_type,
-                       ssl = 30L,
-                       rf = NULL,
-                       NULL)
-  pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
-  list(model_type = model_type,
-       resample_hz = resample_hz,
-       pytorch_device = pytorch_device
-  )
-}
-
 
 #' Run Stepcount Model on Data
 #'
@@ -75,9 +62,9 @@ make_model_params = function(model_type, pytorch_device) {
 #' }
 stepcount = function(
     file,
+    sample_rate = NULL,
     model_type = c("ssl", "rf"),
     model_path = NULL,
-    sample_rate = NULL,
     pytorch_device = c("cpu", "cuda:0"),
     verbose = TRUE,
     keep_data = FALSE
@@ -90,38 +77,13 @@ stepcount = function(
         " available, may need to run stepcount::use_stepcount_condaenv()")
     )
   }
+  model_type = match.arg(model_type, choices = c("ssl", "rf"))
+  pytorch_device = match.arg(pytorch_device, choices = c("cpu", "cuda:0"))
+  resample_hz = switch(model_type,
+                       ssl = 30L,
+                       rf = NULL,
+                       NULL)
 
-  params = make_model_params(model_type = model_type,
-                             pytorch_device = pytorch_device)
-  model_type = params$model_type
-  pytorch_device = params$pytorch_device
-  resample_hz = params$resample_hz
-
-  # Run model
-  if (verbose) {
-    message("Loading model...")
-  }
-  model = sc_load_model(
-    model_path = model_path,
-    model_type = model_type,
-    check_md5 = TRUE,
-    force_download = FALSE,
-    as_python = TRUE)
-
-  out = stepcount_with_model(
-    file = file,
-    model = model,
-    sample_rate = sample_rate,
-    model_type = model_type,
-    pytorch_device = pytorch_device,
-    verbose = verbose,
-    keep_data = keep_data
-  )
-  return(out)
-
-}
-
-transform_data_to_files = function(file, verbose = TRUE) {
   if (verbose) {
     message("Checking Data")
   }
@@ -133,7 +95,9 @@ transform_data_to_files = function(file, verbose = TRUE) {
     }
     tfile = tempfile(fileext = ".csv")
     file = sc_write_csv(data = file, path = tfile)
-    attr(file, "remove_file") = TRUE
+    on.exit({
+      file.remove(tfile)
+    }, add = TRUE)
   }
 
   if (
@@ -155,37 +119,17 @@ transform_data_to_files = function(file, verbose = TRUE) {
     })
     names(file) = file
   }
-  return(file)
-}
 
-
-#' @export
-#' @rdname stepcount
-#' @param model A model object loaded from `sc_load_model`, but
-#' `as_python` must be `TRUE`
-stepcount_with_model = function(
-    file,
-    model_type = c("ssl", "rf"),
-    model,
-    sample_rate = NULL,
-    pytorch_device = c("cpu", "cuda:0"),
-    verbose = TRUE,
-    keep_data = FALSE
-) {
-
-  if (!stepcount_check()) {
-    warning(
-      paste0(
-        "stepcount_check() indicates the stepcount functions may not be ",
-        " available, may need to run stepcount::use_stepcount_condaenv()")
-    )
+  # Run model
+  if (verbose) {
+    message("Loading model...")
   }
-  params = make_model_params(model_type = model_type,
-                             pytorch_device = pytorch_device)
-  model_type = params$model_type
-  pytorch_device = params$pytorch_device
-  resample_hz = params$resample_hz
-
+  model = sc_load_model(
+    model_path = model_path,
+    model_type = model_type,
+    check_md5 = TRUE,
+    force_download = FALSE,
+    as_python = TRUE)
   model$verbose = verbose
   model$wd$verbose = verbose
   model$wd$device = pytorch_device
@@ -193,13 +137,6 @@ stepcount_with_model = function(
   final_out = vector(mode = "list", length = length(file))
   for (ifile in seq_len(length(file))) {
     f = file[[ifile]]
-    remove_file = attr(f, "remove_file")
-    if (!is.null(remove_file) && remove_file) {
-      on.exit({
-        file.remove(f)
-      }, add = TRUE)
-    }
-
     if (verbose) {
       message("Reading in Data for Stepcount")
     }
@@ -214,9 +151,13 @@ stepcount_with_model = function(
     if (verbose) {
       message("Predicting from Model")
     }
-
+    # result = model_predict_from_frame(
+    #   data = data,
+    #   sample_rate =,
+    #   model = model,
+    #   verbose = verbose)
     # TODO: implement reset_sample_rate()
-    model$sample_rate = info[['ResampleRate']]
+    model$sample_rate =  info[['ResampleRate']]
     model$window_len = as.integer(
       ceiling( info[['ResampleRate']] * reticulate::py_to_r(model$window_sec))
     )
@@ -245,7 +186,6 @@ stepcount_with_model = function(
   }
   return(final_out)
 }
-
 
 # model_predict_from_frame = function(
     #     data,

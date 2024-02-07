@@ -29,10 +29,10 @@ sc_model_md5 = function(model_type) {
 #' @export
 sc_load_model = function(
     model_type = c("ssl", "rf"),
+    model_path = NULL,
     check_md5 = TRUE,
     force_download = FALSE,
-    model_path = NULL,
-    as_python = FALSE
+    as_python = TRUE
 ) {
 
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
@@ -71,12 +71,14 @@ sc_model_filename = function(
 
 #' @export
 #' @rdname sc_load_model
+#' @param ... for `sc_download_model`, additional arguments to pass to
+#' [curl::curl_download()]
 sc_download_model = function(
     model_path,
     model_type = c("ssl", "rf"),
-    check_md5 = TRUE
+    check_md5 = TRUE,
+    ...
 ) {
-
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   model_filename = sc_model_filename(model_type = model_type)
   model_md5 = sc_model_md5(model_type)

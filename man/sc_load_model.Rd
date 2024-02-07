@@ -8,30 +8,38 @@
 \usage{
 sc_load_model(
   model_type = c("ssl", "rf"),
+  model_path = NULL,
   check_md5 = TRUE,
   force_download = FALSE,
-  model_path = NULL,
-  as_python = FALSE
+  as_python = TRUE
 )
 
 sc_model_filename(model_type = c("ssl", "rf"))
 
-sc_download_model(model_path, model_type = c("ssl", "rf"), check_md5 = TRUE)
+sc_download_model(
+  model_path,
+  model_type = c("ssl", "rf"),
+  check_md5 = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model_type}{type of the model: either random forest (rf) or
 Self-Supervised Learning model (ssl)}
+
+\item{model_path}{the file path to the model.  If on disk, this can be
+re-used and not re-downloaded.  If \code{NULL}, will download to the
+temporary directory}
 
 \item{check_md5}{Do a MD5 checksum on the file}
 
 \item{force_download}{force a download of the model, even if the file
 exists}
 
-\item{model_path}{the file path to the model.  If on disk, this can be
-re-used and not re-downloaded.  If \code{NULL}, will download to the
-temporary directory}
-
 \item{as_python}{Keep model object as a python object}
+
+\item{...}{for \code{sc_download_model}, additional arguments to pass to
+\code{\link[curl:curl_download]{curl::curl_download()}}}
 }
 \value{
 A model from Python.  \code{sc_download_model} returns a model file path.
