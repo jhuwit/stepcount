@@ -11,15 +11,24 @@
 The goal of `stepcount` is to wrap up the
 <https://github.com/OxWearables/stepcount> algorithm.
 
-## Installation
+# Installation
 
-### Install `stepcount`
+## Install `stepcount` Python Module
 
 See
 <https://github.com/OxWearables/stepcount?tab=readme-ov-file#install>
 for how to install the `stepcount` python module.
 
-You can install the development version of stepcount from
+### Issues
+
+If you are using the Random Forest model from `stepcount`, you may need
+`hmmlearn<0.3.0` due to some issues with its new implementation of its
+models as described <https://github.com/OxWearables/stepcount/issues/62>
+(Feb 2024).
+
+## Install `stepcount` R Package
+
+You can install the development version of `stepcount` from
 [GitHub](https://github.com/) with:
 
 ``` r
