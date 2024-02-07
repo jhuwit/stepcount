@@ -75,9 +75,9 @@ make_model_params = function(model_type, pytorch_device) {
 #' }
 stepcount = function(
     file,
+    sample_rate = NULL,
     model_type = c("ssl", "rf"),
     model_path = NULL,
-    sample_rate = NULL,
     pytorch_device = c("cpu", "cuda:0"),
     verbose = TRUE,
     keep_data = FALSE

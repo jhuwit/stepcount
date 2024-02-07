@@ -1,5 +1,5 @@
 
-convert_to_df = function(x, colname = "steps") {
+old_convert_to_df = function(x, colname = "steps") {
   x = data.frame(
     time = names(x),
     steps = unname(c(x))
@@ -60,7 +60,7 @@ convert_to_df = function(x, colname = "steps") {
 #'   }
 #'   out_df = stepcount(file = df)
 #' }
-stepcount = function(
+old_stepcount = function(
     file,
     sample_rate = NULL,
     model_type = c("ssl", "rf"),
@@ -206,7 +206,7 @@ stepcount = function(
 # }
 
 
-process_stepcount_result = function(result, model) {
+old_process_stepcount_result = function(result, model) {
   W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking")
   if (length(result) > 2) {
     T_steps = try({

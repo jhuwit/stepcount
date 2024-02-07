@@ -9,7 +9,7 @@
 library(testthat)
 library(stepcount)
 
-if (have_stepcount_condaenv()) {
+if (have_stepcount_condaenv() && !stepcount_check()) {
   unset_reticulate_python()
   use_stepcount_condaenv()
 }
