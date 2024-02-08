@@ -53,7 +53,8 @@ jobs:
 
       - name: Pip install stepcount
         shell: bash -el {0}
-        run: pip install stepcount
+        run: pip install git+https://github.com/muschellij2/stepcountpy.git
+        # run: pip install stepcount
 
       - uses: r-lib/actions/check-r-package@v2
         with:
