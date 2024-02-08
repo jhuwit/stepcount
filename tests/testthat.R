@@ -6,11 +6,13 @@
 # * https://r-pkgs.org/testing-design.html#sec-tests-files-overview
 # * https://testthat.r-lib.org/articles/special-files.html
 
+
 library(testthat)
 library(stepcount)
 
-if (have_stepcount_condaenv() && !stepcount_check()) {
-  unset_reticulate_python()
-  use_stepcount_condaenv()
+if (stepcount::have_stepcount_condaenv()) {
+  stepcount::unset_reticulate_python()
+  stepcount::use_stepcount_condaenv()
 }
+
 testthat::test_check("stepcount")

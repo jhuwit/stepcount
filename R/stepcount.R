@@ -190,6 +190,16 @@ stepcount_with_model = function(
   model$wd$verbose = verbose
   model$wd$device = pytorch_device
 
+  file = transform_data_to_files(file = file, verbose = verbose)
+  remove_file = attr(file, "remove_file")
+  if (length(file) == 1 &&
+      !is.null(remove_file) &&
+      remove_file) {
+    on.exit({
+      file.remove(file)
+    }, add = TRUE)
+  }
+
   final_out = vector(mode = "list", length = length(file))
   for (ifile in seq_len(length(file))) {
     f = file[[ifile]]

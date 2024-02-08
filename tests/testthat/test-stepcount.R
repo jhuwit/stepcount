@@ -1,3 +1,7 @@
+remove_file_info = function(result) {
+  result$info$Filename = result$info$`Filesize(MB)` = NULL
+  result
+}
 testthat::test_that("stepcount ssl works", {
   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
   testthat::skip_if_not(stepcount_check())
@@ -7,6 +11,7 @@ testthat::test_that("stepcount ssl works", {
     model_path = file.path(tempdir(), model_path)
     stepcount::sc_download_model(model_path = model_path, model_type = model_type)
     res = stepcount(file = file, model_type = model_type, model_path = model_path)
+    res = remove_file_info(res)
     testthat::expect_true(is.list(res))
     testthat::expect_true(all(c("steps", "walking") %in% names(res)))
     testthat::expect_named(res$steps, c("time", "steps"))
@@ -16,8 +21,18 @@ testthat::test_that("stepcount ssl works", {
                           as_python = TRUE)
     res_model = stepcount_with_model(file = file, model_type = model_type,
                                      model = model)
+    res_model = remove_file_info(res_model)
     # need to do this way because of pointers
     testthat::expect_true(isTRUE(all.equal(res, res_model)))
+
+    df = readr::read_csv(file)
+    res_model_df = stepcount_with_model(file = df, model_type = model_type,
+                                        model = model)
+    res_model_df = remove_file_info(res_model_df)
+
+    # need to do this way because of pointers
+    testthat::expect_true(isTRUE(all.equal(res_model_df, res_model)))
+
   }
 })
 
@@ -31,6 +46,8 @@ testthat::test_that("stepcount rf works", {
     model_path = file.path(tempdir(), model_path)
     stepcount::sc_download_model(model_path = model_path, model_type = model_type)
     res = stepcount(file = file, model_type = model_type, model_path = model_path)
+    res = remove_file_info(res)
+
     testthat::expect_true(is.list(res))
     testthat::expect_true(all(c("steps", "walking") %in% names(res)))
     testthat::expect_named(res$steps, c("time", "steps"))
@@ -40,7 +57,16 @@ testthat::test_that("stepcount rf works", {
                           as_python = TRUE)
     res_model = stepcount_with_model(file = file, model_type = model_type,
                                      model = model)
+    res_model = remove_file_info(res_model)
+
     # need to do this way because of pointers
     testthat::expect_true(isTRUE(all.equal(res, res_model)))
+
+    df = readr::read_csv(file)
+    res_model_df = stepcount_with_model(file = df, model_type = model_type,
+                                        model = model)
+    res_model_df = remove_file_info(res_model_df)
+    # need to do this way because of pointers
+    testthat::expect_true(isTRUE(all.equal(res_model_df, res_model)))
   }
 })
