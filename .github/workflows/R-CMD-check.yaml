@@ -46,6 +46,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: stepcount
+          python-version: 3.9
 
       - name: Conda info
         shell: bash -el {0}
