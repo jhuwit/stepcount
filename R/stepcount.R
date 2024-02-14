@@ -19,7 +19,9 @@ convert_to_df = function(x, colname = "steps") {
   x
 }
 
-make_model_params = function(model_type, pytorch_device) {
+#' @export
+#' @rdname stepcount
+sc_model_params = function(model_type, pytorch_device) {
   model_type = match.arg(model_type, choices = c("ssl", "rf"))
   resample_hz = switch(model_type,
                        ssl = 30L,
@@ -91,7 +93,7 @@ stepcount = function(
     )
   }
 
-  params = make_model_params(model_type = model_type,
+  params = sc_model_params(model_type = model_type,
                              pytorch_device = pytorch_device)
   model_type = params$model_type
   pytorch_device = params$pytorch_device
@@ -180,7 +182,7 @@ stepcount_with_model = function(
         " available, may need to run stepcount::use_stepcount_condaenv()")
     )
   }
-  params = make_model_params(model_type = model_type,
+  params = sc_model_params(model_type = model_type,
                              pytorch_device = pytorch_device)
   model_type = params$model_type
   pytorch_device = params$pytorch_device
