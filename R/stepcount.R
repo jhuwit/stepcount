@@ -97,7 +97,8 @@ stepcount = function(
                              pytorch_device = pytorch_device)
   model_type = params$model_type
   pytorch_device = params$pytorch_device
-  resample_hz = params$resample_hz
+  # not passed
+  # resample_hz = params$resample_hz
 
   # Run model
   if (verbose) {
