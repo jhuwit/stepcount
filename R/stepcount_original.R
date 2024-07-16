@@ -90,10 +90,10 @@ stepcount = function(
 
   # single df
   if (is.data.frame(file)) {
-    if (verbose) {
-      message("Writing file to CSV...")
-    }
     tfile = tempfile(fileext = ".csv")
+    if (verbose) {
+      message(paste("Writing file to CSV...", tfile))
+    }
     file = sc_write_csv(data = file, path = tfile)
     on.exit({
       file.remove(tfile)
