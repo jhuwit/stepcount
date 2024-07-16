@@ -1,3 +1,6 @@
+YEAR: 2024
+COPYRIGHT HOLDER: THE UNIVERSITY OF OXFORD
+
 # Academic Use Licence
 
 **These licence terms apply to all licences granted by THE CHANCELLOR, MASTERS AND SCHOLARS OF THE UNIVERSITY OF OXFORD whose administrative offices are at University Offices, Wellington Square, Oxford OX1 2JD, United Kingdom (the “University”) for use of “stepcount” (“the Software”) through this website (https://github.com/OxWearables) (the ”Website”).**
@@ -36,10 +39,10 @@
 
 2.1	The Licensee shall defend, indemnify and hold harmless the University against any claims, actions, proceedings, losses, damages, expenses and costs (including without limitation court costs and reasonable legal fees) arising out of or in connection with the Licensee's possession or use of the Software, or any breach of these terms by the Licensee.
 
-2.2	The Software is provided on an ‘as is’ basis and the Licensee uses the Software at their own risk. No representations, conditions, warranties or other terms of any kind are given in respect of the the Software and all statutory warranties and conditions are excluded to the fullest extent permitted by law. Without affecting the generality of the previous sentences, the University gives no implied or express warranty and makes no representation that the Software or any part of the Software: 
+2.2	The Software is provided on an ‘as is’ basis and the Licensee uses the Software at their own risk. No representations, conditions, warranties or other terms of any kind are given in respect of the the Software and all statutory warranties and conditions are excluded to the fullest extent permitted by law. Without affecting the generality of the previous sentences, the University gives no implied or express warranty and makes no representation that the Software or any part of the Software:
 
-- (a) will enable specific results to be obtained; or 
-- (b) meets a particular specification or is comprehensive within its field or that it is error free or will operate without interruption; or 
+- (a) will enable specific results to be obtained; or
+- (b) meets a particular specification or is comprehensive within its field or that it is error free or will operate without interruption; or
 - (c) is suitable for any particular, or the Licensee's specific purposes.
 
 2.3	Except in relation to fraud, death or personal injury, the University's liability to the Licensee for any use of the Software, in negligence or arising in any other way out of the subject matter of these licence terms, will not extend to any incidental or consequential damages or losses, or any loss of profits, loss of revenue, loss of data, loss of contracts or opportunity, whether direct or indirect.
@@ -57,9 +60,9 @@
 If you are interested in using the Software commercially, please contact Oxford University Innovation Limited to negotiate a licence. Contact details are enquiries@innovation.ox.ac.uk
 
 ----------------------------------
- 
+
 Java code to read Axivity AX3 raw sensor data, whilst not being the property of Oxford, are released under the terms of the main Oxford Wearables Group licence above. The particular files are: AxivityReader.java, BandpassFiler.java, LowpassFilter.java. These three files were developed under the below license:
- 
+
 Copyright (c) 2014
 Aiden Doherty, University of Oxford
 Nils Hammerla, Newcastle University
@@ -68,17 +71,17 @@ Shing Chan, University of Oxford
 Rosemary Walmsley, University of Oxford
 Hang Yuan, University of Oxford
 All rights reserved.
- 
+
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
- 
+
 * Redistributions of source code must retain the above copyright notice, this
   list of conditions and the following disclaimer.
- 
+
 * Redistributions in binary form must reproduce the above copyright notice,
   this list of conditions and the following disclaimer in the documentation
   and/or other materials provided with the distribution.
- 
+
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE

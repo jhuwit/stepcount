@@ -45,13 +45,12 @@ sc_read = function(
                 resample_hz = resample_hz,
                 sample_rate = sample_rate,
                 verbose = verbose)
-  # if (!keep_pandas) {
-  #   tmp = reticulate::py_to_r(out)
-  #   out = list(
-  #     data = out[[0]],
-  #     info = reticulate::py_to_r(out)[[2]]
-  #   )
-  # }
+  if (keep_pandas) {
+    out = list(
+      data = out[[0]],
+      info = reticulate::py_to_r(out[1])
+    )
+  }
   names(out) = c("data", "info")
   out
 }
