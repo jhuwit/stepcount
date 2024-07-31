@@ -1,12 +1,12 @@
 
-convert_to_df = function(x, colname = "steps") {
+convert_to_df = function(x, colname = "steps", tz = "UTC") {
   x = data.frame(
     time = names(x),
     steps = unname(c(x))
   )
   if (is.character(x$time)) {
     na_x = is.na(x$time) | x$time %in% ""
-    new_x = lubridate::ymd_hms(x$time)
+    new_x = lubridate::ymd_hms(x$time, tz = tz)
     na_new_x = is.na(new_x)
     if (any(na_new_x & !na_x)) {
       warning("Coercion of time to POSIXct induced NAs, keeping character")
@@ -16,6 +16,9 @@ convert_to_df = function(x, colname = "steps") {
     rm(list = c("na_x", "new_x", "na_new_x"))
   }
   colnames(x)[2] = colname
+  if (requireNamespace("dplyr", quietly = TRUE)) {
+    x = dplyr::as_tibble(x)
+  }
   x
 }
 
@@ -244,6 +247,10 @@ stepcount_with_model = function(
       message("Processing Result")
     }
     out = process_stepcount_result(result = result, model = model)
+    if (requireNamespace("dplyr", quietly = TRUE)) {
+      out$walking = dplyr::as_tibble(out$walking)
+      out$steps = dplyr::as_tibble(out$steps)
+    }
     out$info = info
     if (keep_data) {
       out$processed_data = data
@@ -279,15 +286,16 @@ stepcount_with_model = function(
 # }
 
 
-process_stepcount_result = function(result, model) {
-  W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking")
+process_stepcount_result = function(result, model, tz = "UTC") {
+  W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking",
+                    tz = tz)
   if (length(result) > 2) {
     T_steps = try({
       reticulate::py_to_r(result[[2]])
     })
     if (!inherits(T_steps, "try-error")) {
       T_steps = unname(c(T_steps))
-      T_steps = format(T_steps, format = "%Y-%m-%d %H:%M:%OS4")
+      T_steps = format(T_steps, format = "%Y-%m-%d %H:%M:%OS4", tz = tz)
       T_steps = data.frame(time = T_steps)
     } else {
       T_steps = NULL
@@ -306,7 +314,7 @@ process_stepcount_result = function(result, model) {
                              reticulate::py_to_r(model$steptol),
                              adjust_estimates = TRUE)
   result = reticulate::py_to_r(result)
-  result = convert_to_df(result)
+  result = convert_to_df(result, tz = tz)
 
   result$time = lubridate::floor_date(result$time, unit = "1 second")
   out = list(
