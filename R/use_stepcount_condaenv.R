@@ -11,14 +11,15 @@ use_stepcount_condaenv = function(envname =  "stepcount", ...) {
   if (!is.na(reticulate_python)) {
     warning(
       paste0(
-        "RETICULATE_PYTHON environment variable is set, may not work.",
+        "[stepcount] RETICULATE_PYTHON environment variable is set, ",
+        "may not work. ",
         'Restart R, run Sys.unsetenv("RETICULATE_PYTHON") before running,',
         "or run stepcount::unset_reticulate_python()")
     )
   }
-  if (!have_stepcount_condaenv()) {
-    warning("stepcount conda environment does not seem to exist!")
-  }
+  # if (!have_stepcount_condaenv()) {
+  #   warning("stepcount conda environment does not seem to exist!")
+  # }
   reticulate::use_condaenv(condaenv = envname, ...)
 }
 

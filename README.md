@@ -19,6 +19,32 @@ See
 <https://github.com/OxWearables/stepcount?tab=readme-ov-file#install>
 for how to install the `stepcount` python module.
 
+In `R`, you can do this via:
+
+``` r
+envname = "stepcountblah"
+reticulate::conda_create(envname = envname, packages = c("python=3.9", "openjdk", "pip"))
+Sys.unsetenv("RETICULATE_PYTHON")
+reticulate::use_condaenv(envname)
+reticulate::py_install("stepcount", envname = envname, method = "conda", pip = TRUE)
+```
+
+Once this is finished, you should be able to check this via:
+
+``` r
+stepcount::have_stepcount_condaenv()
+stepcount::have_stepcount()
+```
+
+In some cases, you ay want to set `RETICULATE_PYTHON` variable:
+
+``` r
+stepcount::unset_reticulate_python()
+clist = reticulate::conda_list()
+Sys.setenv(RETICULATE_PYTHON = clist$python[clist$name == "stepcount"])
+stepcount::use_stepcount_condaenv()
+```
+
 ### Issues
 
 If you are using the Random Forest model from `stepcount`, you may need
