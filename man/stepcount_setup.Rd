@@ -16,7 +16,9 @@ stepcount_check()
 stepcount_version()
 }
 \arguments{
-\item{packages}{packages to install}
+\item{packages}{packages to install.
+If \code{stepcount} is not included, it will be added.  This package is
+known to work with \verb{stepcount==3.2.4}}
 
 \item{...}{Additional arguments to pass to \code{\link[reticulate:py_install]{reticulate::py_install()}},
 other than \code{pip} (\code{pip = TRUE} enforced)}

@@ -1,6 +1,8 @@
 #' Install the `stepcount` Python Module
 #'
-#' @param packages packages to install
+#' @param packages packages to install.
+#' If `stepcount` is not included, it will be added.  This package is
+#' known to work with `stepcount==3.2.4`
 #' @param ... Additional arguments to pass to [reticulate::py_install()],
 #' other than `pip` (`pip = TRUE` enforced)
 #'
@@ -13,7 +15,9 @@
 #' }
 install_stepcount = function(packages = "stepcount",
                              ...) {
-  packages = unique(c(packages, "stepcount"))
+  if (!any(grepl("^stepcount", trimws(tolower(packages))))) {
+    packages = unique(c(packages, "stepcount"))
+  }
   reticulate::py_install(
     packages = packages,
     pip = TRUE, ...)
