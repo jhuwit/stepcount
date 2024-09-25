@@ -307,12 +307,12 @@ process_stepcount_result = function(result, model, tz = "UTC") {
   result = result[[0]]
 
   sc = stepcount_base()
-  summary = sc$summarize(result,
-                         reticulate::py_to_r(model$steptol),
-                         adjust_estimates = FALSE)
-  summary_adj = sc$summarize(result,
-                             reticulate::py_to_r(model$steptol),
-                             adjust_estimates = TRUE)
+  # summary = sc$summarize(result,
+  #                        reticulate::py_to_r(model$steptol),
+  #                        adjust_estimates = FALSE)
+  # summary_adj = sc$summarize(result,
+  #                            reticulate::py_to_r(model$steptol),
+  #                            adjust_estimates = TRUE)
   result = reticulate::py_to_r(result)
   result = convert_to_df(result, tz = tz)
 
@@ -320,8 +320,8 @@ process_stepcount_result = function(result, model, tz = "UTC") {
   out = list(
     steps = result,
     walking = W,
-    step_times = T_steps,
-    summary = summary,
-    summary_adjusted = summary_adj
+    step_times = T_steps
+    # summary = summary,
+    # summary_adjusted = summary_adj
   )
 }

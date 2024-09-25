@@ -32,6 +32,14 @@ sc_read = function(
   } else {
     sc = stepcount_base()
   }
+  if ("read" %in% names(sc)) {
+    func = sc$read
+  } else if ("utils" %in% names(sc) && "read" %in% names(sc$utils)) {
+    func = sc$utils$read
+  } else {
+    warning("No function for reading found, using stepcount.read as default")
+    func = sc$read
+  }
   verbose = as.logical(verbose)
   assertthat::assert_that(
     assertthat::is.readable(file),
@@ -41,7 +49,7 @@ sc_read = function(
       (assertthat::is.string(resample_hz) && resample_hz == "uniform")
   )
   file = normalizePath(path.expand(file))
-  out = sc$read(filepath = file,
+  out = func(filepath = file,
                 resample_hz = resample_hz,
                 sample_rate = sample_rate,
                 verbose = verbose)
