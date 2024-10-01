@@ -55,7 +55,6 @@ sc_model_params = function(model_type, pytorch_device) {
 #'
 #' @inheritParams sc_load_model
 #' @examples
-#' @examples
 #' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 #' if (stepcount_check()) {
 #'   out = stepcount(file = file)

@@ -61,10 +61,17 @@ Run Stepcount Model on Data
 }
 \examples{
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
-df = readr::read_csv(file)
 if (stepcount_check()) {
   out = stepcount(file = file)
   st = out$step_times
+}
+\dontrun{
+  file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+  df = readr::read_csv(file)
+  if (stepcount_check()) {
+    out = stepcount(file = df)
+    st = out$step_times
+  }
   if (requireNamespace("ggplot2", quietly = TRUE) &&
       requireNamespace("tidyr", quietly = TRUE) &&
       requireNamespace("dplyr", quietly = TRUE)) {
@@ -81,6 +88,6 @@ if (stepcount_check()) {
       ggplot2::geom_line() +
       ggplot2::geom_vline(data = st, ggplot2::aes(xintercept = time))
   }
-  out_df = stepcount(file = df)
+
 }
 }
