@@ -1,5 +1,5 @@
 Package: stepcount
-Title: Estimate Step Counts from Accelerometry Data
+Title: Estimate Step Counts from 'Accelerometry' Data
 Version: 0.3.2
 Authors@R: 
     person(given = "John",
@@ -7,9 +7,9 @@ Authors@R:
            role = c("aut", "cre"),
            email = "muschellij2@gmail.com",
            comment = c(ORCID = "0000-0001-6469-1750"))
-Description: Interfaces the `stepcount` Python 
+Description: Interfaces the 'stepcount' Python 
     module <https://github.com/OxWearables/stepcount> to estimate
-    step counts and other activities from accelerometry data.
+    step counts and other activities from 'accelerometry' data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
