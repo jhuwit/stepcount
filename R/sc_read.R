@@ -13,11 +13,22 @@
 #' @return A list of the data and information about the data
 #' @export
 #'
+#' @note The data `P30_wrist100` is from
+#' \url{https://ora.ox.ac.uk/objects/uuid:19d3cb34-e2b3-4177-91b6-1bad0e0163e7},
+#' where we took the first 180,000 rows, the first 30 minutes of data
+#' from that participant as an example.
+#'
 #' @examples
+#'
 #' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 #' if (stepcount_check()) {
 #'   out = sc_read(file)
-#'   out = sc_read(file, sample_rate = 100L)
+#' }
+#' \dontrun{
+#'   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+#'   if (stepcount_check()) {
+#'     out = sc_read(file, sample_rate = 100L)
+#'   }
 #' }
 sc_read = function(
     file,
