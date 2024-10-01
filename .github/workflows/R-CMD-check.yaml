@@ -54,7 +54,7 @@ jobs:
 
       - name: Pip install stepcount
         shell: bash -el {0}
-        run: pip install -y stepcount
+        run: pip install stepcount
         # run: pip install stepcount
 
       - uses: r-lib/actions/check-r-package@v2
