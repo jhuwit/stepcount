@@ -7,3 +7,4 @@
 ^README_cache$
 ^\.github$
 ^R/obsolete/stepcount_original\.R$
+^cran-comments\.md$
