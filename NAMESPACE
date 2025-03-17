@@ -2,7 +2,6 @@
 
 export("%>%")
 export(conda_create_stepcount)
-export(conda_create_walking_env)
 export(have_stepcount)
 export(have_stepcount_condaenv)
 export(install_stepcount)
