@@ -2,22 +2,36 @@ remove_file_info = function(result) {
   result$info$Filename = result$info$`Filesize(MB)` = NULL
   result
 }
+
+ssl_model_path = file.path(
+  tempdir(),
+  stepcount::sc_model_filename(model_type = "ssl"))
+stepcount::sc_download_model(
+  model_type = "ssl",
+  model_path = ssl_model_path
+)
+
+rf_model_path = file.path(
+  tempdir(),
+  stepcount::sc_model_filename(model_type = "rf"))
+stepcount::sc_download_model(
+  model_type = "rf",
+  model_path = rf_model_path
+)
+
 testthat::test_that("stepcount ssl works", {
   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
   testthat::skip_if_not(stepcount_check())
   if (stepcount_check()) {
     model_type = "ssl"
-    model_path = sc_model_filename(model_type = model_type)
-    model_path = file.path(tempdir(), model_path)
-    stepcount::sc_download_model(model_path = model_path, model_type = model_type)
-    res = stepcount(file = file, model_type = model_type, model_path = model_path)
+    res = stepcount(file = file, model_type = model_type, model_path = ssl_model_path)
     res = remove_file_info(res)
     testthat::expect_true(is.list(res))
     testthat::expect_true(all(c("steps", "walking") %in% names(res)))
     testthat::expect_named(res$steps, c("time", "steps"))
     testthat::expect_named(res$walking, c("time", "walking"))
 
-    model = sc_load_model(model_type = model_type, model_path = model_path,
+    model = sc_load_model(model_type = model_type, model_path = ssl_model_path,
                           as_python = TRUE)
     res_model = stepcount_with_model(file = file, model_type = model_type,
                                      model = model)
@@ -42,10 +56,8 @@ testthat::test_that("stepcount rf works", {
   testthat::skip_if_not(stepcount_check())
   if (stepcount_check()) {
     model_type = "rf"
-    model_path = sc_model_filename(model_type = model_type)
-    model_path = file.path(tempdir(), model_path)
-    stepcount::sc_download_model(model_path = model_path, model_type = model_type)
-    res = stepcount(file = file, model_type = model_type, model_path = model_path)
+    stepcount::sc_download_model(model_path = rf_model_path, model_type = model_type)
+    res = stepcount(file = file, model_type = model_type, model_path = rf_model_path)
     res = remove_file_info(res)
 
     testthat::expect_true(is.list(res))
@@ -53,7 +65,7 @@ testthat::test_that("stepcount rf works", {
     testthat::expect_named(res$steps, c("time", "steps"))
     testthat::expect_named(res$walking, c("time", "walking"))
 
-    model = sc_load_model(model_type = model_type, model_path = model_path,
+    model = sc_load_model(model_type = model_type, model_path = rf_model_path,
                           as_python = TRUE)
     res_model = stepcount_with_model(file = file, model_type = model_type,
                                      model = model)

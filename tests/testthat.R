@@ -15,4 +15,5 @@ if (stepcount::have_stepcount_condaenv()) {
   stepcount::use_stepcount_condaenv()
 }
 
+
 testthat::test_check("stepcount")
