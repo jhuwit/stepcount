@@ -27,6 +27,20 @@ jobs:
           extra-packages: any::covr, any::xml2
           needs: coverage
 
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: stepcount
+          python-version: 3.9
+
+      - name: Conda info
+        shell: bash -el {0}
+        run: conda info
+
+      - name: Pip install stepcount
+        shell: bash -el {0}
+        run: pip install stepcount
+        # run: pip install stepcount
+      
       - name: Test coverage
         run: |
           cov <- covr::package_coverage(
