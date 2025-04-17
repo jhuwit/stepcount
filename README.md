@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/jhuwit/stepcount/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jhuwit/stepcount/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/jhuwit/stepcount/graph/badge.svg)](https://app.codecov.io/gh/jhuwit/stepcount)
 <!-- badges: end -->
 
 The goal of `stepcount` is to wrap up the
