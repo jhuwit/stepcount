@@ -7,6 +7,7 @@
 #' @export
 #' @rdname use_stepcount_condaenv
 use_stepcount_condaenv = function(envname =  "stepcount", ...) {
+  .Deprecated('reticulate::py_require("stepcount")')
   reticulate_python = Sys.getenv("RETICULATE_PYTHON", unset = NA)
   if (!is.na(reticulate_python)) {
     warning(
@@ -32,6 +33,8 @@ conda_create_stepcount = function(
     ...,
     python_version = "3.9"
 ) {
+  .Deprecated('reticulate::py_require("stepcount")')
+
   reticulate::conda_create(
     envname = envname,
     packages = c("openjdk", "pip"),
@@ -55,5 +58,6 @@ unset_reticulate_python = function() {
 #' @export
 #' @rdname use_stepcount_condaenv
 have_stepcount_condaenv = function() {
+  .Deprecated('reticulate::py_require("stepcount")')
   reticulate::condaenv_exists("stepcount")
 }
