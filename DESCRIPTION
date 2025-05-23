@@ -1,6 +1,6 @@
 Package: stepcount
 Title: Estimate Step Counts from 'Accelerometry' Data
-Version: 0.3.3
+Version: 0.4.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
@@ -20,7 +20,7 @@ Imports:
     lubridate,
     magrittr,
     readr,
-    reticulate
+    reticulate (>= 1.42.0)
 Suggests: 
     tidyr,
     dplyr,
