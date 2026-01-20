@@ -43,20 +43,6 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
-      - uses: conda-incubator/setup-miniconda@v3
-        with:
-          activate-environment: stepcount
-          python-version: 3.9
-
-      - name: Conda info
-        shell: bash -el {0}
-        run: conda info
-
-      - name: Pip install stepcount
-        shell: bash -el {0}
-        run: pip install stepcount
-        # run: pip install stepcount
-
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
