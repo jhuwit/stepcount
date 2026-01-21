@@ -102,6 +102,10 @@ stepcount = function(
         " available, may need to run stepcount::use_stepcount_condaenv()")
     )
   }
+  assertthat::assert_that(
+    assertthat::is.readable(file),
+    is.null(sample_rate) || assertthat::is.count(sample_rate)
+  )
 
   params = sc_model_params(model_type = model_type,
                              pytorch_device = pytorch_device)
@@ -186,6 +190,10 @@ stepcount_with_model = function(
     keep_data = FALSE
 ) {
 
+  assertthat::assert_that(
+    assertthat::is.readable(file),
+    is.null(sample_rate) || assertthat::is.count(sample_rate)
+  )
   if (!stepcount_check()) {
     warning(
       paste0(
