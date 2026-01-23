@@ -103,12 +103,12 @@ stepcount = function(
     )
   }
   assertthat::assert_that(
-    assertthat::is.readable(file),
+    # assertthat::is.readable(file), # this is taken care of later
     is.null(sample_rate) || assertthat::is.count(sample_rate)
   )
 
   params = sc_model_params(model_type = model_type,
-                             pytorch_device = pytorch_device)
+                           pytorch_device = pytorch_device)
   model_type = params$model_type
   pytorch_device = params$pytorch_device
   # not passed
@@ -191,25 +191,15 @@ stepcount_with_model = function(
 ) {
 
   assertthat::assert_that(
-    assertthat::is.readable(file),
     is.null(sample_rate) || assertthat::is.count(sample_rate)
   )
   if (!stepcount_check()) {
     warning(
       paste0(
         "stepcount_check() indicates the stepcount functions may not be ",
-        " available, may need to run stepcount::use_stepcount_condaenv()")
+        " available, may need to run reticulate::py_install('stepcount', pip = TRUE)")
     )
   }
-  params = sc_model_params(model_type = model_type,
-                             pytorch_device = pytorch_device)
-  model_type = params$model_type
-  pytorch_device = params$pytorch_device
-  resample_hz = params$resample_hz
-
-  model$verbose = verbose
-  model$wd$verbose = verbose
-  model$wd$device = pytorch_device
 
   file = transform_data_to_files(file = file, verbose = verbose)
   remove_file = attr(file, "remove_file")
@@ -220,6 +210,19 @@ stepcount_with_model = function(
       file.remove(file)
     }, add = TRUE)
   }
+  assertthat::assert_that(
+    sapply(file, assertthat::is.readable)
+  )
+
+  params = sc_model_params(model_type = model_type,
+                           pytorch_device = pytorch_device)
+  model_type = params$model_type
+  pytorch_device = params$pytorch_device
+  resample_hz = params$resample_hz
+
+  model$verbose = verbose
+  model$wd$verbose = verbose
+  model$wd$device = pytorch_device
 
   final_out = vector(mode = "list", length = length(file))
   for (ifile in seq_len(length(file))) {
