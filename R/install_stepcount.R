@@ -19,7 +19,7 @@ stepcount_check = function() {
     stepcount_version()
   }, silent = TRUE)
   have_stepcount() && !inherits(step_version, "try-error") &&
-    length(step_version) > 0
+    length(step_version) > 0 && package_version(step_version) >= package_version("3.11.0")
 }
 
 

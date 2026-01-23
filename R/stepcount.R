@@ -99,7 +99,7 @@ stepcount = function(
     warning(
       paste0(
         "stepcount_check() indicates the stepcount functions may not be ",
-        " available, may need to run stepcount::use_stepcount_condaenv()")
+        " available, may need to run reticulate::py_install('stepcount', pip = TRUE)")
     )
   }
   assertthat::assert_that(
