@@ -1,3 +1,7 @@
+remove_file_info = function(result) {
+  result$info$Filename = result$info$`Filesize(MB)` = NULL
+  result
+}
 
 
 testthat::test_that("stepcount ssl works", {
