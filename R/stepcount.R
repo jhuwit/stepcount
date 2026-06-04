@@ -310,12 +310,13 @@ stepcount_with_model = function(
 # }
 
 
-process_stepcount_result = function(result, model, tz = "UTC") {
-  W = convert_to_df(reticulate::py_to_r(result[[1]]), colname = "walking",
+process_stepcount_result = function(result, model, tz = "UTC",
+                                    py_to_r_fn = reticulate::py_to_r) {
+  W = convert_to_df(py_to_r_fn(result[[1]]), colname = "walking",
                     tz = tz)
   if (length(result) > 2) {
     T_steps = try({
-      reticulate::py_to_r(result[[2]])
+      py_to_r_fn(result[[2]])
     })
     if (!inherits(T_steps, "try-error")) {
       T_steps = unname(c(T_steps))
@@ -337,7 +338,7 @@ process_stepcount_result = function(result, model, tz = "UTC") {
   # summary_adj = sc$summarize(result,
   #                            reticulate::py_to_r(model$steptol),
   #                            adjust_estimates = TRUE)
-  result = reticulate::py_to_r(result)
+  result = py_to_r_fn(result)
   result = convert_to_df(result, tz = tz)
 
   result$time = lubridate::floor_date(result$time, unit = "1 second")
