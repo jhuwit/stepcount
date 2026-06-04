@@ -12,8 +12,6 @@ knitr::opts_chunk$set(
   out.width = "100%",
   cache = TRUE
 )
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv()
 library(stepcount)
 library(reticulate)
 options(digits.secs = 3)
@@ -32,12 +30,22 @@ The goal of `stepcount` is to wrap up the https://github.com/OxWearables/stepcou
 
 ## Install `stepcount` Python Module
 
-See https://github.com/OxWearables/stepcount?tab=readme-ov-file#install for how to install the `stepcount` python module.
+See https://github.com/OxWearables/stepcount?tab=readme-ov-file#install for how to install the `stepcount` python module.  In the new `reticulate`, you can do this via:
 
-In `R`, you can do this via:
+```{r}
+Sys.setenv(
+  RETICULATE_PYTHON = "managed"
+)
+py_require("stepcount==3.11.0", python_version = "3.10")
+sc <- import("stepcount")
+```
+This will install stepcount via `uv` **every time** you rhn the command a new time.
+
+
+You can also install a conda environment via: 
 
 ```{r, eval = FALSE}
-envname = "stepcountblah"
+envname = "stepcount"
 reticulate::conda_create(envname = envname, packages = c("python=3.9", "openjdk", "pip"))
 Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_condaenv(envname)
@@ -47,8 +55,13 @@ reticulate::py_install("stepcount", envname = envname, method = "conda", pip = T
 Once this is finished, you should be able to check this via:
 
 ```{r, eval = FALSE}
-stepcount::have_stepcount_condaenv()
 stepcount::have_stepcount()
+```
+
+The `stepcount_check` function can determine if the `stepcount` module can be loaded and run:
+
+```{r stepcount_check}
+stepcount::stepcount_check()
 ```
 
 In some cases, you ay want to set `RETICULATE_PYTHON` variable:
@@ -59,8 +72,6 @@ clist = reticulate::conda_list()
 Sys.setenv(RETICULATE_PYTHON = clist$python[clist$name == "stepcount"])
 stepcount::use_stepcount_condaenv()
 ```
-
-
 
 ### Issues
 If you are using the Random Forest model from `stepcount`, you may need `hmmlearn<0.3.0` due to some issues with its new implementation of its models as described https://github.com/OxWearables/stepcount/issues/62 (Feb 2024).
@@ -76,33 +87,6 @@ devtools::install_github("jhuwit/stepcount")
 
 
 # Usage
-
-## Loading the `stepcount` conda environment 
-In order to use the `stepcount` conda environment that OxWearables recommends, you must run this command **before `reticulate`** is loaded:
-```{r eval = FALSE}
-stepcount::use_stepcount_condaenv()
-```
-
-## The `RETICULATE_PYTHON` environment variable
-If you have the `RETICULATE_PYTHON` environment variable in your `.Renviron` or your `PATH`, then `reticulate` will still use that version of Python and the code will likely not work.  The `unset_reticulate_python()` function will unset that environment variable.  So the usage would start with something like:
-
-```{r eval = FALSE}
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv()
-```
-
-and if you need `reticulate`, you would load it after
-
-```{r eval = FALSE}
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv()
-library(reticulate)
-```
-
-The `stepcount_check` function can determine if the `stepcount` module can be loaded
-```{r stepcount_check}
-stepcount::stepcount_check()
-```
 
 ## Running `stepcount` (file)
 The main function is `stepcount::stepcount`, which takes can take in a file directly:

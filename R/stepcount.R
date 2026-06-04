@@ -244,6 +244,7 @@ stepcount_with_model = function(
                   keep_pandas = TRUE)
     data = out$data
     info = out$info
+    rm(out); gc()
 
     if (verbose) {
       message("Predicting from Model")
@@ -261,10 +262,15 @@ stepcount_with_model = function(
     }
     result = model$predict_from_frame(data = data)
 
+    if (!keep_data) {
+      rm(data); gc()
+    }
     if (verbose) {
       message("Processing Result")
     }
     out = process_stepcount_result(result = result, model = model)
+    rm(result); gc()
+
     if (requireNamespace("dplyr", quietly = TRUE)) {
       out$walking = dplyr::as_tibble(out$walking)
       out$steps = dplyr::as_tibble(out$steps)

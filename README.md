@@ -19,12 +19,24 @@ The goal of `stepcount` is to wrap up the
 
 See
 <https://github.com/OxWearables/stepcount?tab=readme-ov-file#install>
-for how to install the `stepcount` python module.
-
-In `R`, you can do this via:
+for how to install the `stepcount` python module. In the new
+`reticulate`, you can do this via:
 
 ``` r
-envname = "stepcountblah"
+Sys.setenv(
+  RETICULATE_PYTHON = "managed"
+)
+py_require("stepcount==3.11.0", python_version = "3.10")
+sc <- import("stepcount")
+```
+
+This will install stepcount via `uv` **every time** you rhn the command
+a new time.
+
+You can also install a conda environment via:
+
+``` r
+envname = "stepcount"
 reticulate::conda_create(envname = envname, packages = c("python=3.9", "openjdk", "pip"))
 Sys.unsetenv("RETICULATE_PYTHON")
 reticulate::use_condaenv(envname)
@@ -34,8 +46,15 @@ reticulate::py_install("stepcount", envname = envname, method = "conda", pip = T
 Once this is finished, you should be able to check this via:
 
 ``` r
-stepcount::have_stepcount_condaenv()
 stepcount::have_stepcount()
+```
+
+The `stepcount_check` function can determine if the `stepcount` module
+can be loaded and run:
+
+``` r
+stepcount::stepcount_check()
+#> [1] TRUE
 ```
 
 In some cases, you ay want to set `RETICULATE_PYTHON` variable:
@@ -65,44 +84,6 @@ devtools::install_github("jhuwit/stepcount")
 ```
 
 # Usage
-
-## Loading the `stepcount` conda environment
-
-In order to use the `stepcount` conda environment that OxWearables
-recommends, you must run this command **before `reticulate`** is loaded:
-
-``` r
-stepcount::use_stepcount_condaenv()
-```
-
-## The `RETICULATE_PYTHON` environment variable
-
-If you have the `RETICULATE_PYTHON` environment variable in your
-`.Renviron` or your `PATH`, then `reticulate` will still use that
-version of Python and the code will likely not work. The
-`unset_reticulate_python()` function will unset that environment
-variable. So the usage would start with something like:
-
-``` r
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv()
-```
-
-and if you need `reticulate`, you would load it after
-
-``` r
-stepcount::unset_reticulate_python()
-stepcount::use_stepcount_condaenv()
-library(reticulate)
-```
-
-The `stepcount_check` function can determine if the `stepcount` module
-can be loaded
-
-``` r
-stepcount::stepcount_check()
-#> [1] TRUE
-```
 
 ## Running `stepcount` (file)
 
