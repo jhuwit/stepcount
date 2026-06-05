@@ -55,11 +55,13 @@ sc_model_params = function(model_type, pytorch_device) {
 #'
 #' @inheritParams sc_load_model
 #' @examples
-#' library(magrittr)
-#' file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
-#' if (stepcount_check()) {
-#'   out = stepcount(file = file)
-#'   st = out$step_times
+#' \donttest{
+#'   library(magrittr)
+#'   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+#'   if (stepcount_check()) {
+#'     out = stepcount(file = file)
+#'     st = out$step_times
+#'   }
 #' }
 #' \dontrun{
 #'   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")

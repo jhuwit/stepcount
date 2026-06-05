@@ -40,10 +40,11 @@ where we took the first 180,000 rows, the first 30 minutes of data
 from that participant as an example.
 }
 \examples{
-
-file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
-if (stepcount_check()) {
-  out = sc_read(file)
+\donttest{
+    file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
+    if (stepcount_check()) {
+      out = sc_read(file)
+   }
 }
 \dontrun{
   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
