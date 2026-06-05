@@ -3,7 +3,7 @@ stepcount_base = function() {
   stepcount = try({sc$stepcount})
   if (inherits(stepcount, "try-error")) {
     rlang::inform(
-      paste(capture.output(print(reticulate::py_last_error())), collapse = "\n"),
+      paste(utils::capture.output(print(reticulate::py_last_error())), collapse = "\n"),
       .frequency = "once",
       .frequency_id = "stepcount_base_import_error"
     )
@@ -18,7 +18,7 @@ stepcount_base_noconvert = function() {
   stepcount = try({sc$stepcount})
   if (inherits(stepcount, "try-error")) {
     rlang::inform(
-      paste(capture.output(print(reticulate::py_last_error())), collapse = "\n"),
+      paste(utils::capture.output(print(reticulate::py_last_error())), collapse = "\n"),
       .frequency = "once",
       .frequency_id = "stepcount_base_noconvert_import_error"
     )
