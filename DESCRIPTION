@@ -1,6 +1,6 @@
 Package: stepcount
 Title: Estimate Step Counts from 'Accelerometry' Data
-Version: 0.4.1
+Version: 0.5.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
@@ -25,6 +25,8 @@ Suggests:
     tidyr,
     dplyr,
     ggplot2,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    spelling
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
+Language: en-US

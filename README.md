@@ -30,7 +30,7 @@ py_require("stepcount==3.11.0", python_version = "3.10")
 sc <- import("stepcount")
 ```
 
-This will install stepcount via `uv` **every time** you rhn the command
+This will install stepcount via `uv` **every time** you run the command
 a new time.
 
 You can also install a conda environment via:
