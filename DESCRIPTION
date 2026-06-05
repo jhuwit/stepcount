@@ -19,7 +19,8 @@ Imports:
     lubridate,
     magrittr,
     readr,
-    reticulate (>= 1.42.0)
+    reticulate (>= 1.42.0),
+    rlang
 Suggests: 
     tidyr,
     dplyr,
