@@ -60,6 +60,7 @@ information about the data.
 Run Stepcount Model on Data
 }
 \examples{
+library(magrittr)
 file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
 if (stepcount_check()) {
   out = stepcount(file = file)
