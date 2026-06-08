@@ -5,8 +5,10 @@
 #' @export
 #' @rdname stepcount_setup
 #' @examples
-#' if (have_stepcount()) {
-#'    stepcount_version()
+#' \donttest{
+#'   if (have_stepcount()) {
+#'      stepcount_version()
+#'   }
 #' }
 have_stepcount = function() {
   reticulate::py_module_available("stepcount")

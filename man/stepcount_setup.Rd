@@ -19,7 +19,9 @@ A logical value indicating whether the \code{stepcount} Python module is availab
 Check the \code{stepcount} Python Module
 }
 \examples{
-if (have_stepcount()) {
-   stepcount_version()
+\donttest{
+  if (have_stepcount()) {
+     stepcount_version()
+  }
 }
 }
