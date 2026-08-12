@@ -64,11 +64,11 @@ Run Stepcount Model on Data
   library(magrittr)
   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
   if (stepcount_check()) {
-    out = stepcount(file = file)
+    out = try({stepcount(file = file)})
     st = out$step_times
   }
 }
-\dontrun{
+\donttest{
   file = system.file("extdata/P30_wrist100.csv.gz", package = "stepcount")
   df = readr::read_csv(file)
   if (stepcount_check()) {
@@ -78,15 +78,15 @@ Run Stepcount Model on Data
   if (requireNamespace("ggplot2", quietly = TRUE) &&
       requireNamespace("tidyr", quietly = TRUE) &&
       requireNamespace("dplyr", quietly = TRUE)) {
-    dat = df[10000:12000,] \%>\%
-      dplyr::select(-annotation) \%>\%
+    dat = df[10000:12000,] |>
+      dplyr::select(-dplyr::any_of("annotation")) |>
       tidyr::gather(axis, value, -time)
-    st = st \%>\%
-      dplyr::mutate(time = lubridate::as_datetime(time)) \%>\%
+    st = st |>
+      dplyr::mutate(time = lubridate::as_datetime(time)) |>
       dplyr::as_tibble()
-    st = st \%>\%
+    st = st |>
       dplyr::filter(time >= min(dat$time) & time <= max(dat$time))
-    dat \%>\%
+    dat |>
       ggplot2::ggplot(ggplot2::aes(x = time, y = value, colour = axis)) +
       ggplot2::geom_line() +
       ggplot2::geom_vline(data = st, ggplot2::aes(xintercept = time))

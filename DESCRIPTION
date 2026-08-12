@@ -1,6 +1,6 @@
 Package: stepcount
 Title: Estimate Step Counts from 'Accelerometry' Data
-Version: 0.5.0
+Version: 0.6.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
@@ -18,6 +18,7 @@ Imports:
     curl,
     lubridate,
     magrittr,
+    methods,
     readr,
     reticulate (>= 1.42.0),
     rlang
@@ -26,7 +27,8 @@ Suggests:
     dplyr,
     ggplot2,
     testthat (>= 3.0.0),
-    spelling
+    spelling,
+    callr
 Config/testthat/edition: 3
 Config/roxygen2/version: 8.0.0
 Language: en-US
