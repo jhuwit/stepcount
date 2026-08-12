@@ -270,7 +270,8 @@ testthat::test_that("stepcount_with_model processes mocked results quickly", {
     keep_data = TRUE
   )
 
-  testthat::expect_equal(names(out), c("steps", "walking", "step_times", "info", "processed_data"))
+  testthat::expect_equal(names(out), c("steps", "walking",
+                                       "step_times", "info", "processed_data"))
   testthat::expect_true(inherits(out$steps$time, "POSIXct"))
   testthat::expect_true(inherits(out$walking$time, "POSIXct"))
   testthat::expect_true("processed_data" %in% names(out))
@@ -280,7 +281,8 @@ testthat::test_that("stepcount warns when the Python module is unavailable", {
   fake_out = list(steps = data.frame(), walking = data.frame())
   testthat::local_mocked_bindings(
     stepcount_check = function() FALSE,
-    sc_load_model = function(model_path, model_type, check_md5, force_download, as_python) {
+    sc_load_model = function(model_path, model_type,
+                             check_md5, force_download, as_python) {
       list(wd = list(), window_sec = 1, predict_from_frame = function(...) NULL)
     },
     stepcount_with_model = function(...) fake_out,
