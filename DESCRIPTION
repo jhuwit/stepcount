@@ -13,6 +13,7 @@ Description: Interfaces the 'stepcount' Python
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.1.0)
 Imports: 
     assertthat,
     curl,
