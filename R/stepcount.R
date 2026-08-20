@@ -107,7 +107,8 @@ stepcount = function(
   }
   assertthat::assert_that(
     # assertthat::is.readable(file), # this is taken care of later
-    is.null(sample_rate) || assertthat::is.count(sample_rate)
+    is.null(sample_rate) || assertthat::is.number(sample_rate)
+    # || assertthat::is.count(sample_rate)
   )
 
   params = sc_model_params(model_type = model_type,
@@ -194,7 +195,8 @@ stepcount_with_model = function(
 ) {
 
   assertthat::assert_that(
-    is.null(sample_rate) || assertthat::is.count(sample_rate)
+    is.null(sample_rate) || assertthat::is.number(sample_rate)
+    # || assertthat::is.count(sample_rate)
   )
   if (!stepcount_check()) {
     warning(

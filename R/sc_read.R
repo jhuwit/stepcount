@@ -55,7 +55,8 @@ sc_read = function(
   verbose = as.logical(verbose)
   assertthat::assert_that(
     assertthat::is.readable(file),
-    is.null(sample_rate) || assertthat::is.count(sample_rate),
+    is.null(sample_rate) || assertthat::is.number(sample_rate),
+    # || assertthat::is.count(sample_rate),
     is.null(resample_hz) ||
       assertthat::is.count(resample_hz) ||
       (assertthat::is.string(resample_hz) && resample_hz == "uniform")
