@@ -11,7 +11,8 @@
 #'   }
 #' }
 have_stepcount = function() {
-  reticulate::py_module_available("stepcount")
+  reticulate::py_module_available("stepcount") &&
+    reticulate::py_module_available("stepcount.stepcount")
 }
 
 #' @export
