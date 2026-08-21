@@ -24,7 +24,7 @@ testthat::test_that("model helpers map model types and paths", {
 testthat::test_that("python availability checks can be exercised without python", {
   testthat::local_mocked_bindings(
     py_module_available = function(module) {
-      identical(module, "stepcount")
+      module %in% c("stepcount", "stepcount.stepcount")
     },
     py_list_packages = function() {
       data.frame(package = "stepcount", version = "3.11.2")
