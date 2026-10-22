@@ -1,3 +1,10 @@
+# stepcount (development version)
+
+* `sc_write_csv()` formats times about five times faster with much less
+  memory, and writes the CSV in chunks (`chunk_size`, default 1e6 rows), so
+  writing a data frame for `stepcount()` no longer needs a full character
+  copy of every time. The file written is identical to before.
+
 # stepcount 0.6.0
 
 * Added additional check for `have_stepcount`.
