@@ -7,12 +7,16 @@
 \usage{
 sc_rename_data(data)
 
-sc_write_csv(data, path = tempfile(fileext = ".csv"))
+sc_write_csv(data, path = tempfile(fileext = ".csv"), chunk_size = 1e+06)
 }
 \arguments{
 \item{data}{a \code{data.frame} of raw accelerometry}
 
 \item{path}{path to the CSV output file}
+
+\item{chunk_size}{number of rows formatted and written at a time, which
+bounds the memory used for long recordings. The file is the same for any
+\code{chunk_size}.}
 }
 \value{
 A \code{data.frame} of renamed columns
