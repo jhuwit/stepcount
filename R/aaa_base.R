@@ -1,4 +1,5 @@
 stepcount_base = function() {
+  ensure_stepcount_requirement()
   sc = reticulate::import("stepcount")
   stepcount = try({sc$stepcount})
   if (inherits(stepcount, "try-error")) {
@@ -14,6 +15,7 @@ stepcount_base = function() {
 
 
 stepcount_base_noconvert = function() {
+  ensure_stepcount_requirement()
   sc = reticulate::import("stepcount", convert = FALSE)
   stepcount = try({sc$stepcount})
   if (inherits(stepcount, "try-error")) {

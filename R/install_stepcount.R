@@ -11,6 +11,7 @@
 #'   }
 #' }
 have_stepcount = function() {
+  ensure_stepcount_requirement()
   reticulate::py_module_available("stepcount") &&
     reticulate::py_module_available("stepcount.stepcount")
 }
@@ -28,6 +29,7 @@ stepcount_check = function() {
 
 module_version = function(module = "numpy") {
   assertthat::is.scalar(module)
+  ensure_stepcount_requirement()
   if (!reticulate::py_module_available(module)) {
     stop(paste0(module, " is not installed!"))
   }
