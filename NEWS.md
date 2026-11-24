@@ -1,4 +1,4 @@
-# stepcount (development version)
+# stepcount 0.7.0
 
 * `sc_write_csv()` formats times about five times faster with much less
   memory, and writes the CSV in chunks (`chunk_size`, default 1e6 rows), so
