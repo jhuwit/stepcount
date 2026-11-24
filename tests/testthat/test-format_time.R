@@ -129,3 +129,38 @@ testthat::test_that("sc_write_csv writes the same file in any number of chunks",
     testthat::expect_identical(readLines(out), readLines(expected))
   }
 })
+
+testthat::test_that("format_time_fast matches format for unusual offsets and dates", {
+  # UTC offsets with seconds (Monrovia -0:44:30 to 1972, Kathmandu +5:41:16
+  # to 1920), a skipped calendar day (Samoa, 2011-12-30), offset changes that
+  # are not daylight saving (Caracas, Pyongyang), negative DST (Dublin) and
+  # a +14 zone
+  zones = c("Africa/Monrovia", "Asia/Kathmandu", "Pacific/Apia",
+            "America/Caracas", "Asia/Pyongyang", "Europe/Dublin",
+            "Pacific/Kiritimati", "UTC")
+  starts = c("1930-06-01", "1919-12-31 17:00:00", "1972-01-07 00:00:00",
+             "2011-12-30 09:00:00", "2007-12-09 06:00:00",
+             "2015-08-14 14:00:00", "2016-03-27 00:00:00",
+             # leap days, year ends and the 32-bit rollover
+             "2024-02-28 23:00:00", "2024-02-29 23:00:00",
+             "1900-02-28 23:00:00", "2000-02-29 23:00:00",
+             "2023-12-31 23:00:00", "2038-01-19 03:00:00")
+  t0 = as.numeric(as.POSIXct(starts, tz = "UTC"))
+  steps = seq(0, 2 * 3600, by = 0.0333331)
+  for (tz in zones) {
+    x = .POSIXct(as.vector(outer(steps, t0, "+")), tz = tz)
+    expect_same_format(x, digits = c(0, 3, 6))
+  }
+})
+
+testthat::test_that("sc_write_csv matches the previous output across daylight saving", {
+  n = 3 * 3600 * 10
+  data = data.frame(
+    time = .POSIXct(as.numeric(as.POSIXct("2023-10-29 00:00:00", tz = "UTC")) +
+                      (0:(n - 1)) / 10, tz = "Europe/London"),
+    X = 0.1, Y = 0.2, Z = 0.3
+  )
+  expected = sc_write_csv_reference(data, tempfile(fileext = ".csv"))
+  out = sc_write_csv(data, path = tempfile(fileext = ".csv"), chunk_size = 9999)
+  testthat::expect_identical(readLines(out), readLines(expected))
+})
