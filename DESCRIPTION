@@ -1,6 +1,6 @@
 Package: stepcount
 Title: Estimate Step Counts from 'Accelerometry' Data
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: 
     person(given = "John",
            family = "Muschelli",
