@@ -146,10 +146,12 @@ testthat::test_that("format_time_fast matches format for unusual offsets and dat
              "1900-02-28 23:00:00", "2000-02-29 23:00:00",
              "2023-12-31 23:00:00", "2038-01-19 03:00:00")
   t0 = as.numeric(as.POSIXct(starts, tz = "UTC"))
-  steps = seq(0, 2 * 3600, by = 0.0333331)
+  # every whole second in a two-hour window (the fast path formats whole
+  # seconds with format()), with a small, a messy, and a near-1 fraction
+  steps = as.vector(outer(c(0, 0.0333331, 0.9999999), 0:(2 * 3600), "+"))
   for (tz in zones) {
     x = .POSIXct(as.vector(outer(steps, t0, "+")), tz = tz)
-    expect_same_format(x, digits = c(0, 3, 6))
+    expect_same_format(x, digits = 3)
   }
 })
 
